@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God Child Media — For Those Who Raise Dreams</title>
+    <!-- Google Fonts: Cinzel for Cinematic Brand Headings & Inter for Body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;750;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-deep: #050409;
+            --bg-surface: #0d0a14;
+            --violet-glow: rgba(99, 43, 168, 0.25);
+            --amber-primary: #f0b429;
+            --amber-glow: rgba(240, 180, 41, 0.35);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: rgba(240, 180, 41, 0.2);
+            --transition-smooth: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Cosmic Starfield Background Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(white 1px, transparent 0),
+                radial-gradient(rgba(240,180,41,0.4) 1px, transparent 0);
+            background-size: 80px 80px, 120px 120px;
+            background-position: 0 0, 40px 60px;
+            opacity: 0.15;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Dynamic Glassmorphism Navigation */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 1000;
+            background: rgba(5, 4, 9, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition-smooth);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
+            font-weight: 750;
+            color: var(--amber-primary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px var(--amber-glow);
+            text-decoration: none;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            position: pointer;
+        }
+
+        nav a.active, nav a:hover {
+            color: var(--amber-primary);
+            text-shadow: 0 0 10px var(--amber-glow);
+        }
+
+        /* Hero Section */
+        section {
+            min-height: 100vh;
+            padding: 8rem 2rem 5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            border: 1px solid var(--border-color);
+            background: rgba(240, 180, 41, 0.05);
+            color: var(--amber-primary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 0 20px rgba(240, 180, 41, 0.1);
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 30%, var(--amber-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px var(--violet-glow);
+        }
+
+        .tagline {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1rem, 2vw, 1.35rem);
+            color: var(--amber-primary);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        p.hero-desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.9rem 2.2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f0b429, #d99a11);
+            color: #050409;
+            border: none;
+            box-shadow: 0 0 25px var(--amber-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 35px rgba(240, 180, 41, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--amber-primary);
+            background: rgba(240, 180, 41, 0.05);
+        }
+
+        /* Section Header Titles */
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        /* Floating Feature Cards Grid (Scroll Reveal) */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+            
+            /* Initial Scroll Reveal State */
+            opacity: 0;
+            transform: translateY(50px);
+            transition: var(--transition-smooth), opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .card.active-reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--amber-primary);
+            box-shadow: 0 10px 30px rgba(99, 43, 168, 0.2);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--amber-primary);
+        }
+
+        .card h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Supabase Database Form Integration Section */
+        .cta-section {
+            background: linear-gradient(180deg, var(--bg-deep), var(--bg-surface));
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .waitlist-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 500px;
+            margin: 2rem auto 0 auto;
+            width: 100%;
+        }
+
+        .waitlist-form input {
+            flex: 1;
+            padding: 0.9rem 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .waitlist-form input:focus {
+            border-color: var(--amber-primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer span {
+            color: var(--amber-primary);
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            nav ul { display: none; }
+            .waitlist-form { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Navigation (Scroll-Spy Connected) -->
+    <header id="header">
+        <div class="nav-container">
+            <a href="#hero" class="logo-text">God Child Media</a>
+            <nav>
+                <ul>
+                    <li><a href="#hero" class="nav-link active">Home</a></li>
+                    <li><a href="#solutions" class="nav-link">Solutions</a></li>
+                    <li><a href="#engine" class="nav-link">Content Engine</a></li>
+                    <li><a href="#saas" class="nav-link">SaaS Builders</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">AI Business Architecture</div>
+            <h1>God Child Media</h1>
+            <div class="tagline">For Those Who Raise Dreams</div>
+            <p class="hero-desc">Deploy high-leverage AI business solutions designed to optimize web performance, automate content ecosystems, and launch enterprise-grade SaaS products effortlessly.</p>
+            <div class="btn-group">
+                <a href="#solutions" class="btn btn-primary">Explore Solutions</a>
+                <a href="#saas" class="btn btn-secondary">Build SaaS</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solutions Section (Floating Scroll Reveal Cards) -->
+    <section id="solutions">
+        <div class="section-header">
+            <h2>AI-Powered Solutions</h2>
+            <p>Engineered to scale your digital presence with surgical precision.</p>
+        </div>
+        <div class="grid-3">
+            <div class="card reveal">
+                <div class="card-icon">⚡</div>
+                <h3>Website Optimization</h3>
+                <p>Advanced programmatic SEO, structured metadata pipelines, and automated asset speed tuning to dominate search visibility.</p>
+            </div>
+            <div class="card reveal">
+                <div class="card-icon">✨</div>
+                <h3>Content Creation Engine</h3>
+                <p>Generate conversion-focused copy, dynamic media assets, and automated storytelling pipelines tuned for brand consistency.</p>
+            </div>
+            <div class="card reveal">
+                <div class="card-icon">🚀</div>
+                <h3>SaaS Builder Systems</h3>
+                <p>Rapidly prototype, architect, and deploy micro-SaaS applications connected to robust serverless database backends.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Engine Section -->
+    <section id="engine">
+        <div class="section-header">
+            <h2>Autonomous Content Infrastructure</h2>
+            <p>Streamline production workflows from data scraping to publication.</p>
+        </div>
+        <div class="grid-3">
+            <div class="card reveal">
+                <div class="card-icon">📊</div>
+                <h3>Data Enrichment</h3>
+                <p>Extract and clean localized directory datasets using automated cloud scrapers and structured database schemas.</p>
+            </div>
+            <div class="card reveal">
+                <div class="card-icon">🎨</div>
+                <h3>Brand Asset Grading</h3>
+                <p>Maintain precise visual identities with cel-shaded lighting parameters and cinematic atmospheric standards.</p>
+            </div>
+            <div class="card reveal">
+                <div class="card-icon">🔗</div>
+                <h3>Pipeline Automation</h3>
+                <p>Connect backend PostgreSQL tables to lightweight frontend renderers for instant content updates.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SaaS Builders & Waitlist Section -->
+    <section id="saas" class="cta-section">
+        <div class="hero-content" style="max-width: 700px; margin: 0 auto;">
+            <div class="hero-badge">Supabase & Render Ready</div>
+            <h2>Ready to Raise Your Dream?</h2>
+            <p class="hero-desc" style="margin-bottom: 1.5rem;">Join forward-thinking builders leveraging custom AI tools for next-gen business infrastructure.</p>
+            
+            <!-- Future Supabase Form Hook -->
+            <form class="waitlist-form" id="waitlistForm">
+                <input type="email" id="userEmail" placeholder="Enter your business email..." required>
+                <button type="submit" class="btn btn-primary">Initialize</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 <span>God Child Media</span>. All Rights Reserved. For Those Who Raise Dreams.</p>
+    </footer>
+
+    <!-- JavaScript: Scroll-Spy & Floating Card Reveal Controller -->
+    <script>
+        // 1. Floating Card Scroll Reveal (Intersection Observer)
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active-reveal');
+                    observer.unobserve(entry.target); // Animate once
+                }
+            });
+        }, {
+            threshold: 0.15
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 2. Dynamic Scroll-Spy Navigation (Updates Header Menu Active States)
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // 3. Supabase Form Handler Stub (Ready for your database hook)
+        document.getElementById('waitlistForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('userEmail').value;
+            alert(`Thank you! Initialization request received for: ${email}`);
+            // TODO: Hook up your Supabase client insert here!
+            this.reset();
+        });
+    </script>
+</body>
+</html>
+
