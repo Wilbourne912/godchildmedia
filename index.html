@@ -12,7 +12,7 @@
     <style>
         :root {
             --bg-deep: #050409;
-            --bg-surface: #0d0a14;
+            --bg-surface: rgba(13, 10, 20, 0.85);
             --violet-glow: rgba(99, 43, 168, 0.25);
             --amber-primary: #f0b429;
             --amber-glow: rgba(240, 180, 41, 0.35);
@@ -38,6 +38,22 @@
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             position: relative;
+        }
+
+        /* Fixed Background Mascot Layer (Stays locked in place as user scrolls) */
+        .fixed-bg-mascot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(180deg, rgba(5, 4, 9, 0.75) 0%, rgba(5, 4, 9, 0.88) 70%, rgba(5, 4, 9, 0.95) 100%),
+                        url('https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_celeste_side.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -2;
+            pointer-events: none;
         }
 
         /* Cosmic Starfield Background Effect */
@@ -69,21 +85,28 @@
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1.25rem 2rem;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo-text {
-            font-family: 'Cinzel', serif;
-            font-size: 1.25rem;
-            font-weight: 750;
-            color: var(--amber-primary);
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 0 0 15px var(--amber-glow);
+        .logo-link {
+            display: flex;
+            align-items: center;
             text-decoration: none;
+        }
+
+        .logo-img {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px var(--amber-glow));
+            transition: transform 0.3s ease;
+        }
+
+        .logo-img:hover {
+            transform: scale(1.05);
         }
 
         nav ul {
@@ -92,7 +115,7 @@
             gap: 2rem;
         }
 
-        nav a {
+        nav a.nav-link {
             color: var(--text-muted);
             text-decoration: none;
             font-size: 0.9rem;
@@ -100,15 +123,15 @@
             letter-spacing: 1px;
             text-transform: uppercase;
             transition: color 0.3s ease;
-            position: pointer;
+            cursor: pointer;
         }
 
-        nav a.active, nav a:hover {
+        nav a.nav-link.active, nav a.nav-link:hover {
             color: var(--amber-primary);
             text-shadow: 0 0 10px var(--amber-glow);
         }
 
-        /* Hero Section */
+        /* Sections */
         section {
             min-height: 100vh;
             padding: 8rem 2rem 5rem 2rem;
@@ -240,6 +263,7 @@
 
         .card {
             background: var(--bg-surface);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--border-color);
             padding: 2.5rem 2rem;
             border-radius: 12px;
@@ -261,7 +285,7 @@
         .card:hover {
             transform: translateY(-8px);
             border-color: var(--amber-primary);
-            box-shadow: 0 10px 30px rgba(99, 43, 168, 0.2);
+            box-shadow: 0 10px 30px rgba(99, 43, 168, 0.3);
         }
 
         .card-icon {
@@ -285,7 +309,8 @@
 
         /* Supabase Database Form Integration Section */
         .cta-section {
-            background: linear-gradient(180deg, var(--bg-deep), var(--bg-surface));
+            background: linear-gradient(180deg, rgba(5, 4, 9, 0.4), rgba(13, 10, 20, 0.85));
+            backdrop-filter: blur(10px);
             border-top: 1px solid var(--border-color);
             text-align: center;
         }
@@ -318,6 +343,8 @@
             text-align: center;
             padding: 3rem 2rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(5, 4, 9, 0.9);
+            backdrop-filter: blur(10px);
             color: var(--text-muted);
             font-size: 0.85rem;
         }
@@ -336,10 +363,15 @@
 </head>
 <body>
 
+    <!-- Fixed Background Mascot Layer -->
+    <div class="fixed-bg-mascot"></div>
+
     <!-- Dynamic Navigation (Scroll-Spy Connected) -->
     <header id="header">
         <div class="nav-container">
-            <a href="#hero" class="logo-text">God Child Media</a>
+            <a href="#hero" class="logo-link">
+                <img src="https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_logo.webp" alt="God Child Media Logo" class="logo-img">
+            </a>
             <nav>
                 <ul>
                     <li><a href="#hero" class="nav-link active">Home</a></li>
@@ -462,7 +494,6 @@
             
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
                 if (pageYOffset >= (sectionTop - 200)) {
                     current = section.getAttribute('id');
                 }
@@ -470,7 +501,7 @@
 
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) {
+                if (current && link.getAttribute('href') === `#${current}`) {
                     link.classList.add('active');
                 }
             });
