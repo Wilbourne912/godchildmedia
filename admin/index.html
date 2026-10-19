@@ -370,24 +370,171 @@
             </section>
         </main>
     </div>
+<script>
+    // 1. Enforce Admin Security on Load
+    document.addEventListener('DOMContentLoaded', async () => {
+        const authorized = await GCM.auth.requireAdmin('../index.html');
+        if (!authorized) return;
 
-    <script>
-        // Tab Switcher Script
-        function switchTab(tabId, btnElement) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById(tabId).classList.add('active');
-            btnElement.classList.add('active');
+        // Load all dashboard datasets
+        await loadTransmissions();
+        await loadComments();
+        await loadUsers();
+    });
+
+    // Tab Switcher Script
+    function switchTab(tabId, btnElement) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        btnElement.classList.add('active');
+    }
+
+    // 2. Transmissions Management
+    async function loadTransmissions() {
+        try {
+            const posts = await GCM.posts.list(50);
+            const tbody = document.getElementById('posts-table-body');
+            tbody.innerHTML = '';
+
+            if (posts.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #9ca3af;">No transmissions found.</td></tr>`;
+                return;
+            }
+
+            posts.forEach(post => {
+                const tr = document.createElement('tr');
+                const dateStr = new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                
+                tr.innerHTML = `
+                    <td class="title-col">${escapeHtml(post.title)}</td>
+                    <td>${escapeHtml(post.tag || 'Uncategorized')}</td>
+                    <td>${dateStr}</td>
+                    <td>
+                        <div class="action-links">
+                            <button class="delete-action" onclick="deleteTransmission('${post.id}')">Delete</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (err) {
+            console.error('Failed to load transmissions:', err);
         }
+    }
 
-        // Form submission stub (Ready for Claude's Supabase client integration)
-        document.getElementById('post-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Transmission broadcast simulated! Ready to wire up Supabase client insertion.');
+    // Publish New Transmission Form Handler
+    document.getElementById('post-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const title = document.getElementById('post-title').value;
+        const tag = document.getElementById('post-tag').value;
+        const videoUrl = document.getElementById('post-video').value;
+        const readTime = document.getElementById('post-read').value;
+        const summary = document.getElementById('post-summary').value;
+
+        try {
+            await GCM.admin.createPost({ title, summary, tag, videoUrl, readTime });
+            alert('Transmission successfully broadcasted to the network!');
             this.reset();
-        });
-    </script>
+            await loadTransmissions();
+        } catch (err) {
+            console.error('Error creating post:', err);
+            alert('Failed to broadcast transmission: ' + err.message);
+        }
+    });
+
+    async function deleteTransmission(id) {
+        if (!confirm('Are you sure you want to terminate this transmission?')) return;
+        try {
+            await GCM.admin.deletePost(id);
+            await loadTransmissions();
+        } catch (err) {
+            console.error('Error deleting post:', err);
+            alert('Failed to delete transmission.');
+        }
+    }
+
+    // 3. User Feedback & Comments Management
+    async function loadComments() {
+        try {
+            const comments = await GCM.admin.listComments();
+            const tbody = document.getElementById('comments-table-body');
+            tbody.innerHTML = '';
+
+            if (comments.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #9ca3af;">No recent feedback recorded.</td></tr>`;
+                return;
+            }
+
+            comments.forEach(c => {
+                const tr = document.createElement('tr');
+                const timeAgo = new Date(c.created_at).toLocaleTimeString();
+                tr.innerHTML = `
+                    <td class="title-col">${escapeHtml(c.user_email)}</td>
+                    <td>${escapeHtml(c.posts?.title || 'General')}</td>
+                    <td>"${escapeHtml(c.content)}"</td>
+                    <td>${timeAgo}</td>
+                    <td><button class="delete-action" onclick="deleteComment('${c.id}')">Remove</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (err) {
+            console.error('Failed to load comments:', err);
+        }
+    }
+
+    async function deleteComment(id) {
+        try {
+            await GCM.admin.deleteComment(id);
+            await loadComments();
+        } catch (err) {
+            console.error('Error deleting comment:', err);
+        }
+    }
+
+    // 4. User Accounts & Waitlist Registry
+    async function loadUsers() {
+        try {
+            const users = await GCM.admin.listUsers();
+            const tbody = document.getElementById('users-table-body');
+            tbody.innerHTML = '';
+
+            users.forEach(user => {
+                const tr = document.createElement('tr');
+                const joinedDate = new Date(user.created_at).toLocaleDateString();
+                tr.innerHTML = `
+                    <td class="title-col">${escapeHtml(user.email)}</td>
+                    <td><span style="color: #f0b429;">Operative</span></td>
+                    <td>${joinedDate}</td>
+                    <td><button class="delete-action" onclick="deleteUser('${user.id}')">Revoke</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (err) {
+            console.error('Failed to load users:', err);
+        }
+    }
+
+    async function deleteUser(id) {
+        if (!confirm('Revoke access for this user/waitlist entry?')) return;
+        try {
+            await GCM.admin.deleteUser(id);
+            await loadUsers();
+        } catch (err) {
+            console.error('Error deleting user:', err);
+        }
+    }
+
+    // Utility helper to prevent XSS
+    function escapeHtml(str) {
+        return String(str || '').replace(/[&<>'"]/g, 
+            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+    }
+</script>
+    
 </body>
 </html>
 
