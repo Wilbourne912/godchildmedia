@@ -673,15 +673,35 @@
             });
         });
 
-        // 3. Supabase Form Handler Stub (Ready for your database hook)
-        document.getElementById('waitlistForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('userEmail').value;
-            alert(`Thank you! Initialization request received for: ${email}`);
-            // TODO: Hook up your Supabase client insert here!
-            this.reset();
-        });
-    </script>
-</body>
-</html>
+        // Replace the existing waitlistForm event listener in index_root.html
+document.getElementById('waitlistForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const emailInput = document.getElementById('userEmail');
+    const email = emailInput.value.trim();
+    const submitBtn = this.querySelector('button[type="submit"]');
 
+    try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Initializing...';
+
+        const result = await GCM.waitlist.join(email);
+
+        if (result.ok) {
+            if (result.duplicate) {
+                alert(`Notice: ${email} is already registered in the GCM operative registry.`);
+            } else {
+                alert(`Initialization successful! Welcome to God Child Media, ${email}.`);
+            }
+            this.reset();
+        } else if (result.reason === 'invalid') {
+            alert('Error: Please provide a valid email address.');
+        }
+    } catch (err) {
+        console.error('Waitlist join error:', err);
+        alert('System error during initialization. Please try again later.');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Initialize';
+    }
+});
+    
