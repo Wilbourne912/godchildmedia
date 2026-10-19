@@ -78,7 +78,7 @@
 
     setText('.transmission-tag', post.tag);
     setText('.transmission-info h3', post.title);
-    setText('.transmission-info p', post.summary.length > 220 ? post.summary.slice(0, 220).trimEnd() + '...' : post.summary);
+    setText('.transmission-info p', post.summary);
 
     const badge = widget.querySelector('.transmission-badge span:last-child');
     if (badge) badge.textContent = 'Latest Transmission';

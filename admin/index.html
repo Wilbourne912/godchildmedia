@@ -221,10 +221,13 @@
             .form-group.full { grid-column: span 1; }
         }
     </style>
+
+
+    <meta name="robots" content="noindex, nofollow">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/js/gcm-api.js"></script>
-
-
+<script src="/js/gcm-admin.js"></script>
+<script src="/js/gcm-dashboard.js"></script>
 </head>
 <body>
 
@@ -370,24 +373,7 @@
             </section>
         </main>
     </div>
-
-    <script>
-        // Tab Switcher Script
-        function switchTab(tabId, btnElement) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
-            
-            document.getElementById(tabId).classList.add('active');
-            btnElement.classList.add('active');
-        }
-
-        // Form submission stub (Ready for Claude's Supabase client integration)
-        document.getElementById('post-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Transmission broadcast simulated! Ready to wire up Supabase client insertion.');
-            this.reset();
-        });
-    </script>
+    <script src="/js/gcm-dashboard.js"></script>
 </body>
 </html>
 
