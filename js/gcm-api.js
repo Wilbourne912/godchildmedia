@@ -3,6 +3,7 @@
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vYnd0b2d6a3ZqZ2FnaHdwenhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMDk4NTUsImV4cCI6MjEwNzc4NTg1NX0.pbmQ1K1_XnbLdvyZinH0PYQ-dXhtp5XCuDIwMNxApeQ';
 
   const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const POST_COLUMNS = 'id, title, slug, summary, tag, video_url, read_time, created_at';
 
   const clean = (v) => String(v || '').trim();
   const normEmail = (v) => clean(v).toLowerCase();
@@ -23,10 +24,10 @@
 
     posts: {
       async list(limit = 50) {
-        return unwrap(await db.from('posts').select('*').order('created_at', { ascending: false }).limit(limit));
+        return unwrap(await db.from('posts').select(POST_COLUMNS).order('created_at', { ascending: false }).limit(limit));
       },
       async latest() {
-        return unwrap(await db.from('posts').select('*').order('created_at', { ascending: false }).limit(1).maybeSingle());
+        return unwrap(await db.from('posts').select(POST_COLUMNS).order('created_at', { ascending: false }).limit(1).maybeSingle());
       },
       async bySlug(slug) {
         return unwrap(await db.from('posts').select('*').eq('slug', slug).maybeSingle());
@@ -95,15 +96,19 @@
     },
 
     admin: {
-      async createPost({ title, summary, tag, videoUrl, readTime, slug }) {
+      async createPost({ title, summary, content, tag, videoUrl, readTime, slug }) {
         return unwrap(await db.from('posts').insert({
           title: clean(title),
           slug: clean(slug) || GCM.slugify(title),
           summary: clean(summary),
+          content: clean(content) || null,
           tag: clean(tag),
           video_url: clean(videoUrl) || null,
           read_time: clean(readTime) || null,
         }).select().single());
+      },
+      async getPost(id) {
+        return unwrap(await db.from('posts').select('*').eq('id', id).single());
       },
       async updatePost(id, fields) {
         return unwrap(await db.from('posts').update(fields).eq('id', id).select().single());
