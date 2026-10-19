@@ -253,6 +253,131 @@
             font-size: 1.05rem;
         }
 
+
+/* Latest Transmission Widget */
+.latest-transmission-container {
+    margin-top: 2.5rem;
+    width: 100%;
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.transmission-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding: 0 0.5rem;
+}
+.transmission-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #f0b429;
+}
+.live-pulse {
+    width: 8px;
+    height: 8px;
+    background-color: #f0b429;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #f0b429;
+    animation: pulse 2s infinite;
+}
+.view-all-link {
+    color: #9ca3af;
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+.transmission-card {
+    background: rgba(13, 10, 20, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(240, 180, 41, 0.2);
+    border-radius: 16px;
+    padding: 1.75rem;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 1.5rem;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.transmission-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #a78bfa;
+    background: rgba(99, 43, 168, 0.2);
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+}
+.transmission-card h3 {
+    font-family: 'Cinzel', serif;
+    color: #f3f4f6;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+.transmission-card p {
+    color: #9ca3af;
+    font-size: 0.925rem;
+    margin-bottom: 1rem;
+}
+.transmission-meta {
+    display: flex;
+    gap: 1.25rem;
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-bottom: 1.25rem;
+}
+.video-preview-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.preview-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.play-button-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 4, 9, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.play-icon-circle {
+    width: 44px;
+    height: 44px;
+    background: #f0b429;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(240, 180, 41, 0.6);
+}
+@keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+}
+@media (max-width: 768px) {
+    .transmission-card { grid-template-columns: 1fr; padding: 1.25rem; }
+}
+
+
+
+
+
+
+
         /* Floating Feature Cards Grid (Scroll Reveal) */
         .grid-3 {
             display: grid;
@@ -360,6 +485,9 @@
             .waitlist-form { flex-direction: column; }
         }
     </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/js/gcm-api.js"></script>
+
 </head>
 <body>
 
@@ -395,7 +523,45 @@
                 <a href="#saas" class="btn btn-secondary">Build SaaS</a>
             </div>
         </div>
-    </section>
+   
+<!-- ==========================================
+     LATEST TRANSMISSION WIDGET (Landing Page)
+     ========================================== -->
+<div class="latest-transmission-container reveal">
+    <div class="transmission-header-row">
+        <div class="transmission-badge">
+            <span class="live-pulse"></span>
+            <span>Latest Transmission &bull; Intel #04</span>
+        </div>
+        <a href="blog/" class="view-all-link">View All Archives &rarr;</a>
+    </div>
+
+    <div class="transmission-card">
+        <div class="transmission-info">
+            <span class="transmission-tag">AI Content Engines</span>
+            <h3>Autonomous Pipelines: Scaling High-End Media Without Burning Out</h3>
+            <p>A deep dive into how God Child Media deploys self-sustaining agent architectures to handle video production and deployment at scale.</p>
+            <div class="transmission-meta">
+                <span>8 min read</span>
+                <span>Video Included</span>
+            </div>
+            <div class="transmission-actions">
+                <a href="blog/" class="btn-amber-glow" style="color: #f0b429; text-decoration: none; font-size: 0.85rem; font-weight: 500;">Watch & Read Transmission &rarr;</a>
+            </div>
+        </div>
+        <div class="transmission-media-preview">
+            <div class="video-preview-wrapper">
+                <img src="https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_logo.webp" alt="Transmission Thumbnail" class="preview-thumb">
+                <div class="play-button-overlay">
+                    <div class="play-icon-circle">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="#050409"><polygon points="5,3 19,12 5,21"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ </section>
 
     <!-- Solutions Section (Floating Scroll Reveal Cards) -->
     <section id="solutions">

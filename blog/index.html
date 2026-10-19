@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God Child Media | Transmissions & Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #050409;
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        .cosmic-bg-fixed {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
+            background: url('https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_celeste_side.webp') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .cosmic-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background: linear-gradient(135deg, rgba(5, 4, 9, 0.92) 0%, rgba(13, 10, 20, 0.88) 100%);
+        }
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 100;
+            background: rgba(5, 4, 9, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(240, 180, 41, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+        }
+        .brand-logo-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+        .brand-logo {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: 1px solid #f0b429;
+            object-fit: cover;
+        }
+        .brand-title {
+            font-family: 'Cinzel', serif;
+            color: #f3f4f6;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .nav-back {
+            color: #f0b429;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+        .nav-back:hover { opacity: 0.8; }
+        .blog-container {
+            max-width: 1200px;
+            margin: 120px auto 80px auto;
+            padding: 0 2rem;
+        }
+        .blog-hero-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .blog-hero-header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            letter-spacing: 3px;
+            color: #f3f4f6;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        .blog-hero-header p {
+            color: #9ca3af;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+        .blog-card {
+            background: rgba(13, 10, 20, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(240, 180, 41, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        .blog-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(240, 180, 41, 0.5);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 15px rgba(240, 180, 41, 0.2);
+        }
+        .blog-card-media {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            position: relative;
+            background: #000;
+        }
+        .blog-card-media img, .blog-card-media iframe {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border: none;
+        }
+        .blog-card-body {
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .blog-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #f0b429;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+        .blog-card h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
+            color: #f3f4f6;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+        }
+        .blog-card p {
+            color: #9ca3af;
+            font-size: 0.925rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        .blog-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 1rem;
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+        .read-btn {
+            background: transparent;
+            border: 1px solid #f0b429;
+            color: #f0b429;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .read-btn:hover {
+            background: #f0b429;
+            color: #050409;
+            box-shadow: 0 0 12px rgba(240, 180, 41, 0.4);
+        }
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #9ca3af;
+            font-size: 0.85rem;
+            background: rgba(5, 4, 9, 0.9);
+        }
+    </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/js/gcm-api.js"></script>
+
+
+</head>
+<body>
+
+    <div class="cosmic-bg-fixed"></div>
+    <div class="cosmic-overlay"></div>
+
+    <!-- Navigation Bar (Root relative link back to index.html) -->
+    <header>
+        <a href="../index.html" class="brand-logo-link">
+            <img src="https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_logo.webp" alt="God Child Media Logo" class="brand-logo">
+            <span class="brand-title">God Child Media</span>
+        </a>
+        <a href="../index.html" class="nav-back">&larr; Return to Hub</a>
+    </header>
+
+    <main class="blog-container">
+        <div class="blog-hero-header">
+            <h1>Transmissions & Intelligence</h1>
+            <p>High-leverage insights, video breakdowns, and blueprints for autonomous business systems.</p>
+        </div>
+
+        <div class="blog-grid">
+            <article class="blog-card">
+                <div class="blog-card-media">
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Autonomous Pipelines Video" allowfullscreen></iframe>
+                </div>
+                <div class="blog-card-body">
+                    <span class="blog-tag">AI Content Engines</span>
+                    <h2>Autonomous Pipelines: Scaling High-End Media Without Burning Out</h2>
+                    <p>Learn how to wire up automated content engines that draft, render, and publish media across your ecosystem seamlessly.</p>
+                    <div class="blog-card-footer">
+                        <span>Oct 18, 2026</span>
+                        <a href="#" class="read-btn">Read Full Article</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="blog-card-media">
+                    <img src="https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_logo.webp" alt="Micro-SaaS Architecture">
+                </div>
+                <div class="blog-card-body">
+                    <span class="blog-tag">Micro-SaaS Builders</span>
+                    <h2>Micro-SaaS Architecture: Building Modular Utilities on Supabase</h2>
+                    <p>A comprehensive walkthrough on structuring high-speed serverless database backends for specialized client apps.</p>
+                    <div class="blog-card-footer">
+                        <span>Oct 14, 2026</span>
+                        <a href="#" class="read-btn">Read Full Article</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="blog-card">
+                <div class="blog-card-media">
+                    <img src="https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_logo.webp" alt="Cinematic Motion Design">
+                </div>
+                <div class="blog-card-body">
+                    <span class="blog-tag">Website Optimization</span>
+                    <h2>Cinematic Motion Design: The Apple & Stripe Standard in Vanilla CSS</h2>
+                    <p>Achieving butter-smooth glassmorphic transitions and scroll-driven reveal animations without bloated JavaScript frameworks.</p>
+                    <div class="blog-card-footer">
+                        <span>Oct 09, 2026</span>
+                        <a href="#" class="read-btn">Read Full Article</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 God Child Media. For Those Who Raise Dreams.</p>
+    </footer>
+
+</body>
+</html>
+

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God Child Media | Command Center (Admin)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #050409;
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Fixed Cosmic Background */
+        .cosmic-bg-fixed {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2;
+            background: url('https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_celeste_side.webp') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .cosmic-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            background: linear-gradient(135deg, rgba(5, 4, 9, 0.94) 0%, rgba(13, 10, 20, 0.90) 100%);
+        }
+
+        /* Top Bar */
+        header {
+            background: rgba(5, 4, 9, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(240, 180, 41, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: #f3f4f6;
+            text-decoration: none;
+        }
+        .admin-brand img {
+            width: 36px; height: 36px; border-radius: 50%; border: 1px solid #f0b429;
+        }
+        .nav-back {
+            color: #9ca3af; text-decoration: none; font-size: 0.85rem; transition: color 0.2s;
+        }
+        .nav-back:hover { color: #f0b429; }
+
+        /* Dashboard Layout */
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            flex-grow: 1;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        aside {
+            background: rgba(13, 10, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 2rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .sidebar-btn {
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            text-align: left;
+            padding: 0.85rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .sidebar-btn:hover, .sidebar-btn.active {
+            background: rgba(240, 180, 41, 0.1);
+            color: #f0b429;
+            border-left: 3px solid #f0b429;
+        }
+
+        /* Main Content Workspace */
+        main {
+            padding: 2.5rem;
+            overflow-y: auto;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        h2.section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+            color: #f3f4f6;
+        }
+
+        /* Glass Cards & Forms */
+        .glass-card {
+            background: rgba(13, 10, 20, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(240, 180, 41, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 2rem;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .form-group.full { grid-column: span 2; }
+        label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #9ca3af;
+        }
+        input, textarea, select {
+            background: rgba(5, 4, 9, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.925rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: #f0b429;
+            box-shadow: 0 0 10px rgba(240, 180, 41, 0.2);
+        }
+        textarea { resize: vertical; min-height: 120px; }
+
+        .btn-amber {
+            background: #f0b429;
+            color: #050409;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(240, 180, 41, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-amber:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(240, 180, 41, 0.7);
+        }
+
+        /* Tables & Lists */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+        }
+        th {
+            color: #f0b429;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+        }
+        td { color: #9ca3af; }
+        td.title-col { color: #f3f4f6; font-weight: 500; }
+        
+        .action-links {
+            display: flex;
+            gap: 1rem;
+        }
+        .action-links button {
+            background: transparent; border: none; cursor: pointer; font-size: 0.85rem; font-weight: 500;
+        }
+        .edit-action { color: #f0b429; }
+        .delete-action { color: #ef4444; }
+
+        @media (max-width: 900px) {
+            .admin-layout { grid-template-columns: 1fr; }
+            aside { flex-direction: row; overflow-x: auto; padding: 1rem; }
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full { grid-column: span 1; }
+        }
+    </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="/js/gcm-api.js"></script>
+
+
+</head>
+<body>
+
+    <div class="cosmic-bg-fixed"></div>
+    <div class="cosmic-overlay"></div>
+
+    <header>
+        <a href="../index.html" class="admin-brand">
+            <img src="https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_logo.webp" alt="GCM Logo">
+            <span>Command Center</span>
+        </a>
+        <a href="../index.html" class="nav-back">&larr; Exit to Public Hub</a>
+    </header>
+
+    <div class="admin-layout">
+        <!-- Sidebar Navigation -->
+        <aside>
+            <button class="sidebar-btn active" onclick="switchTab('transmissions', this)">📡 Manage Transmissions</button>
+            <button class="sidebar-btn" onclick="switchTab('comments', this)">💬 User Feedback &amp; Reactions</button>
+            <button class="sidebar-btn" onclick="switchTab('users', this)">👥 User Accounts &amp; Waitlist</button>
+        </aside>
+
+        <!-- Workspace Area -->
+        <main>
+            <!-- TAB 1: TRANSMISSIONS (POST / EDIT / DELETE) -->
+            <section id="transmissions" class="tab-content active">
+                <h2 class="section-title">Transmission Engine</h2>
+                
+                <!-- Create/Edit Form -->
+                <div class="glass-card">
+                    <h3 style="font-family: 'Cinzel', serif; margin-bottom: 1.25rem; font-size: 1.1rem; color: #f0b429;">Broadcast New Transmission</h3>
+                    <form id="post-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Transmission Title</label>
+                                <input type="text" id="post-title" placeholder="e.g., Autonomous Pipelines" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Category Tag</label>
+                                <input type="text" id="post-tag" placeholder="e.g., AI Content Engines" required>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Video URL (YouTube / CDN)</label>
+                                <input type="url" id="post-video" placeholder="https://www.youtube.com/embed/...">
+                            </div>
+                            <div class="form-group">
+                                <label>Read Time</label>
+                                <input type="text" id="post-read" placeholder="e.g., 8 min read">
+                            </div>
+                        </div>
+                        <div class="form-group full">
+                            <label>Transmission Summary / Content</label>
+                            <textarea id="post-summary" placeholder="Write or paste transmission intelligence brief..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-amber">Publish Transmission &rarr;</button>
+                    </form>
+                </div>
+
+                <!-- Existing Posts Table -->
+                <div class="glass-card">
+                    <h3 style="font-family: 'Cinzel', serif; margin-bottom: 1rem; font-size: 1.1rem; color: #f3f4f6;">Active Broadcast Archives</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Tag</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="posts-table-body">
+                            <!-- Populated dynamically via JS / Supabase -->
+                            <tr>
+                                <td class="title-col">Autonomous Pipelines: Scaling High-End Media</td>
+                                <td>AI Content Engines</td>
+                                <td>Oct 18, 2026</td>
+                                <td>
+                                    <div class="action-links">
+                                        <button class="edit-action">Edit</button>
+                                        <button class="delete-action">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB 2: USER COMMENTS & REACTIONS -->
+            <section id="comments" class="tab-content">
+                <h2 class="section-title">User Intelligence &amp; Feedback</h2>
+                <div class="glass-card">
+                    <h3 style="font-family: 'Cinzel', serif; margin-bottom: 1rem; font-size: 1.1rem; color: #f3f4f6;">Recent Reactions &amp; Comments</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Transmission</th>
+                                <th>Reaction / Comment</th>
+                                <th>Timestamp</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comments-table-body">
+                            <tr>
+                                <td class="title-col">alex@cosmicdev.io</td>
+                                <td>Autonomous Pipelines</td>
+                                <td>"This architecture cut our production pipeline time in half. Incredible blueprint."</td>
+                                <td>2 hours ago</td>
+                                <td><button class="delete-action">Remove</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TAB 3: USER ACCOUNTS & WAITLIST -->
+            <section id="users" class="tab-content">
+                <h2 class="section-title">User Accounts &amp; Waitlist Registry</h2>
+                <div class="glass-card">
+                    <h3 style="font-family: 'Cinzel', serif; margin-bottom: 1rem; font-size: 1.1rem; color: #f3f4f6;">Registered Operatives</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Email Address</th>
+                                <th>Status</th>
+                                <th>Joined Date</th>
+                                <th>Manage</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <tr>
+                                <td class="title-col">founder@godchildmedia.com</td>
+                                <td><span style="color: #f0b429;">Administrator</span></td>
+                                <td>Oct 01, 2026</td>
+                                <td><button class="edit-action">Modify</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Tab Switcher Script
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.sidebar-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        // Form submission stub (Ready for Claude's Supabase client integration)
+        document.getElementById('post-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Transmission broadcast simulated! Ready to wire up Supabase client insertion.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>
+
