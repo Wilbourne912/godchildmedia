@@ -161,6 +161,40 @@
   function init() {
     const form = $('post-form');
     const submit = form.querySelector('button[type="submit"]');
+
+    const summaryField = $('post-summary');
+    const summaryGroup = summaryField.closest('.form-group');
+    const summaryLabel = summaryGroup ? summaryGroup.querySelector('label') : null;
+    if (summaryLabel) summaryLabel.textContent = 'Landing Page Summary (short teaser, max 300 characters)';
+    summaryField.maxLength = 300;
+    summaryField.placeholder = 'One or two sentences shown on the landing page and blog cards...';
+    summaryField.style.minHeight = '90px';
+    const counter = document.createElement('small');
+    counter.style.cssText = 'display:block;margin-top:6px;color:#9ca3af;font-size:0.75rem;';
+    const updateCounter = () => {
+      counter.textContent = summaryField.value.length + ' / 300';
+    };
+    summaryField.addEventListener('input', updateCounter);
+    summaryField.insertAdjacentElement('afterend', counter);
+
+    let contentField = $('post-content');
+    if (!contentField) {
+      const group = document.createElement('div');
+      group.className = 'form-group full';
+      const label = document.createElement('label');
+      label.textContent = 'Full Article Content (shown on the blog post page)';
+      label.htmlFor = 'post-content';
+      contentField = document.createElement('textarea');
+      contentField.id = 'post-content';
+      contentField.required = true;
+      contentField.placeholder = 'Write the full transmission here. Leave a blank line between paragraphs.';
+      contentField.style.minHeight = '280px';
+      group.appendChild(label);
+      group.appendChild(contentField);
+      (summaryGroup || summaryField).insertAdjacentElement('afterend', group);
+    }
+    form.addEventListener('reset', () => setTimeout(updateCounter, 0));
+    updateCounter();
     const submitLabel = submit.textContent;
     const cancel = document.createElement('button');
     cancel.type = 'button';
@@ -186,6 +220,7 @@
       const videoUrl = $('post-video').value.trim();
       const readTime = $('post-read').value;
       const summary = $('post-summary').value;
+      const content = contentField.value;
 
       if (videoUrl && !/^https:\/\//i.test(videoUrl)) {
         alert('Video URL must start with https://');
@@ -199,19 +234,23 @@
             title: title.trim(),
             tag: tag.trim(),
             summary: summary.trim(),
+            content: content.trim() || null,
             video_url: videoUrl || null,
             read_time: readTime.trim() || null,
           });
           alert('Transmission updated.');
         } else {
-          await GCM.admin.createPost({ title, summary, tag, videoUrl, readTime });
+          await GCM.admin.createPost({ title, summary, content, tag, videoUrl, readTime });
           alert('Transmission broadcast to the network.');
         }
         resetForm();
         await loadPosts();
       } catch (err) {
         console.error('Save failed:', err);
-        alert(err && err.code === '23505' ? 'A transmission with that title already exists.' : 'Failed to save transmission.');
+        const reason = err && err.code === '23505' ? 'A transmission with that title already exists.'
+          : err && err.code === '23514' ? 'Summary must be 300 characters or less.'
+          : 'Failed to save transmission.';
+        alert(reason);
       } finally {
         submit.disabled = false;
       }
@@ -219,7 +258,7 @@
 
     bindTable('posts-table-body', async (action, id) => {
       if (action === 'edit') {
-        const post = postsById[id];
+        const post = await GCM.admin.getPost(id);
         if (!post) return;
         editingId = id;
         $('post-title').value = post.title;
@@ -227,6 +266,8 @@
         $('post-video').value = post.video_url || '';
         $('post-read').value = post.read_time || '';
         $('post-summary').value = post.summary;
+        contentField.value = post.content || '';
+        updateCounter();
         submit.textContent = 'Save Changes \u2192';
         cancel.style.display = 'inline-block';
         form.scrollIntoView({ behavior: 'smooth', block: 'start' });
