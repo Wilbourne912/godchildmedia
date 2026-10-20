@@ -19,6 +19,7 @@
       '.gcm-lead { font-size: 1.15rem; line-height: 1.6; color: #f3f4f6; margin-bottom: 1.75rem; padding-left: 1rem; border-left: 3px solid #f0b429; }',
     '.gcm-body { line-height: 1.75; color: #d1d5db; font-size: 1.02rem; margin-bottom: 3rem; }',
     '.gcm-body p { white-space: pre-wrap; margin: 0 0 1.2rem; }',
+      '.gcm-body a { color: #f0b429; text-decoration: underline; text-underline-offset: 3px; }',
       '.gcm-comments { padding: 1.75rem; border-radius: 16px; background: rgba(13, 10, 20, 0.85); border: 1px solid rgba(240, 180, 41, 0.2); backdrop-filter: blur(10px); }',
       '.gcm-comments h2 { font-family: Cinzel, serif; font-size: 1.2rem; color: #f0b429; margin-bottom: 1rem; }',
       '.gcm-totals { color: #9ca3af; font-size: 0.9rem; margin-bottom: 1rem; }',
@@ -50,7 +51,30 @@
     }
 
     const fmtDate = (v) => new Date(v).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
+    function richText(parent, text) {
+      const pattern = /\[([^\]]+)\]\((https:\/\/[^\s)]+)\)|(https:\/\/[^\s<>()]+)/g;
+      let last = 0;
+      let match;
+      while ((match = pattern.exec(text)) !== null) {
+        let url = match[2] || match[3];
+        if (match[3]) {
+          const trail = url.match(/[.,;:!?]+$/);
+          if (trail) {
+            url = url.slice(0, -trail[0].length);
+            pattern.lastIndex -= trail[0].length;
+          }
+        }
+        if (match.index > last) parent.appendChild(document.createTextNode(text.slice(last, match.index)));
+        const link = document.createElement('a');
+        link.href = url;
+        link.textContent = match[1] || url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        parent.appendChild(link);
+        last = pattern.lastIndex;
+      }
+      if (last < text.length) parent.appendChild(document.createTextNode(text.slice(last)));
+    }
     function showMessage(container, text) {
       container.textContent = '';
       container.appendChild(el('p', 'gcm-empty', text));
@@ -313,11 +337,11 @@
       }
       const bodyEl = el('div', 'gcm-body');
       (fullText || post.summary).split(/\n{2,}/).forEach((part) => {
-        if (part.trim()) bodyEl.appendChild(el('p', '', part.trim()));
-      });
-      wrap.appendChild(bodyEl);
-      wrap.appendChild(buildComments(post));
-    }
+                if (part.trim()) {
+          const paragraph = el('p');
+          richText(paragraph, part.trim());
+          bodyEl.appendChild(paragraph);
+                }
 
     if (typeof GCM === 'undefined') {
       showMessage(grid, 'Backend unavailable. Reload the page.');
