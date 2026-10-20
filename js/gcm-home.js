@@ -107,8 +107,18 @@
       }
     }
 
+        const postUrl = 'blog/?slug=' + encodeURIComponent(post.slug);
     const link = widget.querySelector('.transmission-actions a');
-    if (link) link.href = 'blog/?slug=' + encodeURIComponent(post.slug);
+    if (link) link.href = postUrl;
+
+    const preview = widget.querySelector('.video-preview-wrapper');
+    if (preview) {
+      const tap = document.createElement('a');
+      tap.href = postUrl;
+      tap.setAttribute('aria-label', 'Open transmission: ' + post.title);
+      tap.style.cssText = 'position:absolute;inset:0;display:block;z-index:2;';
+      preview.appendChild(tap);
+    }
   }
 
   loadLatestTransmission().catch((err) => console.error('Latest transmission error:', err));
