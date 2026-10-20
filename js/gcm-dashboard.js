@@ -195,6 +195,49 @@
     }
     form.addEventListener('reset', () => setTimeout(updateCounter, 0));
     updateCounter();
+
+    let thumbInput = $('post-thumb');
+    let thumbPreview = null;
+    let thumbRemove = null;
+    let editingThumb = null;
+    if (!thumbInput) {
+      const group = document.createElement('div');
+      group.className = 'form-group full';
+      const label = document.createElement('label');
+      label.textContent = 'Thumbnail (JPG, PNG or WebP, max 2 MB)';
+      label.htmlFor = 'post-thumb';
+      thumbInput = document.createElement('input');
+      thumbInput.type = 'file';
+      thumbInput.id = 'post-thumb';
+      thumbInput.accept = 'image/jpeg,image/png,image/webp';
+      thumbPreview = document.createElement('img');
+      thumbPreview.alt = 'Current thumbnail';
+      thumbPreview.style.cssText = 'display:none;max-width:240px;max-height:135px;margin-top:10px;border-radius:8px;border:1px solid rgba(240,180,41,0.3);object-fit:cover;';
+      const removeLabel = document.createElement('label');
+      removeLabel.style.cssText = 'display:none;margin-top:8px;font-size:0.85rem;color:#9ca3af;cursor:pointer;';
+      thumbRemove = document.createElement('input');
+      thumbRemove.type = 'checkbox';
+      thumbRemove.style.marginRight = '8px';
+      removeLabel.appendChild(thumbRemove);
+      removeLabel.appendChild(document.createTextNode('Remove current thumbnail'));
+      group.appendChild(label);
+      group.appendChild(thumbInput);
+      group.appendChild(thumbPreview);
+      group.appendChild(removeLabel);
+      (contentField.closest('.form-group') || summaryGroup || summaryField).insertAdjacentElement('afterend', group);
+    }
+
+    function setThumbPreview(path) {
+      editingThumb = path || null;
+      if (thumbPreview) {
+        thumbPreview.style.display = path ? 'block' : 'none';
+        if (path) thumbPreview.src = GCM.thumbnails.url(path);
+      }
+      if (thumbRemove) {
+        thumbRemove.checked = false;
+        thumbRemove.parentElement.style.display = path ? 'block' : 'none';
+      }
+    }
     const submitLabel = submit.textContent;
     const cancel = document.createElement('button');
     cancel.type = 'button';
@@ -207,6 +250,7 @@
     function resetForm() {
       form.reset();
       editingId = null;
+      setThumbPreview(null);
       submit.textContent = submitLabel;
       cancel.style.display = 'none';
     }
@@ -227,21 +271,41 @@
         return;
       }
 
+      const file = thumbInput.files && thumbInput.files[0];
+      if (file) {
+        const problem = GCM.thumbnails.check(file);
+        if (problem) {
+          alert(problem);
+          return;
+        }
+      }
+
       submit.disabled = true;
+      let newPath = null;
       try {
-        if (editingId) {
-          await GCM.admin.updatePost(editingId, {
-            title: title.trim(),
-            tag: tag.trim(),
-            summary: summary.trim(),
-            content: content.trim() || null,
-            video_url: videoUrl || null,
-            read_time: readTime.trim() || null,
-          });
-          alert('Transmission updated.');
-        } else {
-          await GCM.admin.createPost({ title, summary, content, tag, videoUrl, readTime });
-          alert('Transmission broadcast to the network.');
+        if (file) newPath = await GCM.admin.uploadThumbnail(file);
+        try {
+          if (editingId) {
+            const fields = {
+              title: title.trim(),
+              tag: tag.trim(),
+              summary: summary.trim(),
+              content: content.trim() || null,
+              video_url: videoUrl || null,
+              read_time: readTime.trim() || null,
+            };
+            if (newPath) fields.thumbnail_path = newPath;
+            else if (thumbRemove && thumbRemove.checked) fields.thumbnail_path = null;
+            await GCM.admin.updatePost(editingId, fields);
+            if ((newPath || fields.thumbnail_path === null) && editingThumb) await GCM.admin.removeThumbnail(editingThumb);
+            alert('Transmission updated.');
+          } else {
+            await GCM.admin.createPost({ title, summary, content, tag, videoUrl, readTime, thumbnailPath: newPath });
+            alert('Transmission broadcast to the network.');
+          }
+        } catch (saveErr) {
+          if (newPath) await GCM.admin.removeThumbnail(newPath);
+          throw saveErr;
         }
         resetForm();
         await loadPosts();
@@ -268,13 +332,17 @@
         $('post-summary').value = post.summary;
         contentField.value = post.content || '';
         updateCounter();
+        thumbInput.value = '';
+        setThumbPreview(post.thumbnail_path);
         submit.textContent = 'Save Changes \u2192';
         cancel.style.display = 'inline-block';
         form.scrollIntoView({ behavior: 'smooth', block: 'start' });
         return;
       }
       if (!confirm('Delete this transmission and all its comments?')) return;
+      const doomed = postsById[id];
       await GCM.admin.deletePost(id);
+      if (doomed && doomed.thumbnail_path) await GCM.admin.removeThumbnail(doomed.thumbnail_path);
       if (editingId === id) resetForm();
       await loadPosts();
     });

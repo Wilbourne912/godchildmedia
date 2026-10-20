@@ -80,6 +80,15 @@
     setText('.transmission-info h3', post.title);
     setText('.transmission-info p', post.summary.length > 220 ? post.summary.slice(0, 220).trimEnd() + '...' : post.summary);
 
+    const thumbSrc = GCM.thumbnails.forPost(post);
+    const thumbImg = widget.querySelector('.preview-thumb');
+    if (thumbImg && thumbSrc) {
+      thumbImg.src = thumbSrc;
+      thumbImg.style.objectFit = 'cover';
+    }
+    const overlay = widget.querySelector('.play-button-overlay');
+    if (overlay) overlay.style.display = post.video_url ? '' : 'none';
+
     const badge = widget.querySelector('.transmission-badge span:last-child');
     if (badge) badge.textContent = 'Latest Transmission';
 
