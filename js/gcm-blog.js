@@ -342,7 +342,10 @@
           richText(paragraph, part.trim());
           bodyEl.appendChild(paragraph);
                 }
-
+      });
+      wrap.appendChild(bodyEl);
+      wrap.appendChild(buildComments(post));
+    }
     if (typeof GCM === 'undefined') {
       showMessage(grid, 'Backend unavailable. Reload the page.');
       return;
