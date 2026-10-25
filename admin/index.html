@@ -244,10 +244,17 @@
 
     <div class="admin-layout">
         <!-- Sidebar Navigation -->
-        <aside>
-            <button class="sidebar-btn active" onclick="switchTab('transmissions', this)">📡 Manage Transmissions</button>
-            <button class="sidebar-btn" onclick="switchTab('comments', this)">💬 User Feedback &amp; Reactions</button>
-            <button class="sidebar-btn" onclick="switchTab('users', this)">👥 User Accounts &amp; Waitlist</button>
+<aside>
+    <button class="sidebar-btn active" onclick="switchTab('transmissions', this)">📡 Manage Transmissions</button>
+    <button class="sidebar-btn" onclick="switchTab('comments', this)">💬 User Feedback &amp; Reactions</button>
+    <button class="sidebar-btn" onclick="switchTab('users', this)">👥 User Accounts &amp; Waitlist</button>
+    <button class="sidebar-btn" onclick="switchTab('leads', this)">🏢 B2B Leads &amp; Demo Passwords</button>
+</aside>
+
+
+
+
+
         </aside>
 
         <!-- Workspace Area -->
@@ -371,6 +378,27 @@
                     </table>
                 </div>
             </section>
+<!-- TAB 4: B2B LEADS & DEMO PASSWORDS -->
+<section id="leads" class="tab-content">
+    <h2 class="section-title">B2B Eatery Demo Leads</h2>
+    <div class="glass-card">
+        <h3 style="font-family: 'Cinzel', serif; margin-bottom: 1rem; font-size: 1.1rem; color: #f3f4f6;">Pending & Approved Business Access Requests</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Business & Owner</th>
+                    <th>Location / Phone</th>
+                    <th>Status</th>
+                    <th>Demo Password</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="leads-table-body">
+                <!-- Populated dynamically via GCM.admin.listLeads() -->
+            </tbody>
+        </table>
+    </div>
+</section>
         </main>
     </div>
     <script src="/js/gcm-dashboard.js"></script>

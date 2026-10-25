@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2B Eatery Demo Portal | God Child Media</title>
+    <!-- Google Fonts: Cinzel & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;750;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-deep: #050409;
+            --bg-surface: rgba(13, 10, 20, 0.85);
+            --amber-primary: #f0b429;
+            --amber-glow: rgba(240, 180, 41, 0.35);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: rgba(240, 180, 41, 0.2);
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Fixed Background Mascot Layer */
+        .fixed-bg-mascot {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(180deg, rgba(5, 4, 9, 0.75) 0%, rgba(5, 4, 9, 0.88) 70%, rgba(5, 4, 9, 0.95) 100%),
+                        url('https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_celeste_side.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Header & Navigation Bar */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 1000;
+            background: rgba(5, 4, 9, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            gap: 0.75rem;
+        }
+
+        .logo-img {
+            height: 36px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px var(--amber-glow));
+        }
+
+        .nav-back {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-back:hover {
+            color: var(--amber-primary);
+        }
+
+        /* Main Portal Layout */
+        main {
+            flex-grow: 1;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 8rem 2rem 5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .portal-hero {
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.4rem 1.1rem;
+            border: 1px solid var(--border-color);
+            background: rgba(240, 180, 41, 0.05);
+            color: var(--amber-primary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1.25rem;
+            border-radius: 50px;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        p.portal-desc {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* Glassmorphic Cards & Grid */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .glass-card {
+            background: var(--bg-surface);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        .glass-card h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.35rem;
+            color: var(--amber-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .glass-card p.card-sub {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 1.75rem;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: rgba(5, 4, 9, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input:focus {
+            border-color: var(--amber-primary);
+            box-shadow: 0 0 12px var(--amber-glow);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 0.95rem;
+            margin-top: 0.5rem;
+            background: linear-gradient(135deg, #f0b429, #d99a11);
+            color: #050409;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 20px var(--amber-glow);
+            transition: var(--transition-smooth);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(240, 180, 41, 0.6);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        /* Status Box & Info styling */
+        .info-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .info-icon {
+            width: 32px; height: 32px;
+            background: rgba(240, 180, 41, 0.1);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--amber-primary);
+            flex-shrink: 0;
+            font-weight: 600;
+        }
+
+        .info-content h4 {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            margin-bottom: 0.2rem;
+        }
+
+        .info-content p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(5, 4, 9, 0.9);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer span {
+            color: var(--amber-primary);
+            font-family: 'Cinzel', serif;
+        }
+
+        @media (max-width: 850px) {
+            .portal-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+
+    <!-- Supabase & GCM API SDKs -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="/js/gcm-api.js"></script>
+</head>
+<body>
+
+    <div class="fixed-bg-mascot"></div>
+
+    <!-- Navigation Header -->
+    <header>
+        <div class="nav-container">
+            <a href="../index.html" class="logo-link">
+                <img src="https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_logo.webp" alt="GCM Logo" class="logo-img">
+                <span style="font-family: 'Cinzel', serif; font-size: 0.95rem; color: #f3f4f6; letter-spacing: 1px;">God Child Media</span>
+            </a>
+            <a href="../index.html" class="nav-back">&larr; Return to Hub</a>
+        </div>
+    </header>
+
+    <!-- Main Portal Content -->
+    <main>
+        <div class="portal-hero">
+            <div class="hero-badge">B2B Verified Access</div>
+            <h1>Eatery Demo Portal</h1>
+            <p class="portal-desc">Request secure credentials to evaluate our flagship restaurant management & administrative demo platform.</p>
+        </div>
+
+        <div class="portal-grid">
+            <!-- Left Column: Sign-Up / Password Request Form -->
+            <div class="glass-card">
+                <h2>Request Access Credentials</h2>
+                <p class="card-sub">Submit your business details for quick verification by our operations team.</p>
+                
+                <form id="b2bPortalForm">
+                    <div class="form-group">
+                        <label for="busName">Business Name</label>
+                        <input type="text" id="busName" placeholder="e.g., Bella Vista Bistro" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="busLocation">Location (City, State)</label>
+                        <input type="text" id="busLocation" placeholder="e.g., Austin, TX" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="busEmail">Business Owner Email</label>
+                        <input type="email" id="busEmail" placeholder="owner@bellavista.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="busPhone">Phone Number</label>
+                        <input type="tel" id="busPhone" placeholder="(555) 000-0000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="busWebsite">Business Website or Google Maps URL</label>
+                        <input type="text" id="busWebsite" placeholder="https://bellavista.com">
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="portalSubmitBtn">Request Demo Password &rarr;</button>
+                </form>
+            </div>
+
+            <!-- Right Column: Process Guide & Phone Appointment Scheduling -->
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div class="glass-card">
+                    <h2>Verification Process</h2>
+                    <p class="card-sub">How access is granted to protect our demo infrastructure.</p>
+                    
+                    <ul class="info-list">
+                        <li class="info-item">
+                            <div class="info-icon">1</div>
+                            <div class="info-content">
+                               <h4>Submit Lead Info</h4>
+                               <p>Provide your official business credentials to enter our verification queue.</p>
+                            </div>
+                        </li>
+                        <li class="info-item">
+                            <div class="info-icon">2</div>
+                            <div class="info-content">
+                               <h4>Admin Review</h4>
+                               <p>Our team verifies active restaurant or hospitality operations within 24 hours.</p>
+                            </div>
+                        </li>
+                        <li class="info-item">
+                            <div class="info-icon">3</div>
+                            <div class="info-content">
+                               <h4>Receive Password</h4>
+                               <p>Your pre-set secure demo password is dispatched directly to your owner email.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Phone Appointment Scheduling Card -->
+                <div class="glass-card" style="background: rgba(13, 10, 20, 0.95);">
+                    <h2>Schedule a Phone Walkthrough</h2>
+                    <p class="card-sub">Prefer a live guided tour? Book a 15-minute phone appointment directly.</p>
+                    
+                    <!-- Calendar / Booking Embed Slot (e.g. Calendly / Cal.com or direct scheduling link) -->
+                    <div style="text-align: center; padding: 1rem 0;">
+                        <a href="https://calendly.com" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display: inline-block; text-decoration: none; text-align: center;">Book Phone Appointment &rarr;</a>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.8rem;">Direct phone consultations with God Child Media architects.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 <span>God Child Media</span>. All Rights Reserved. For Those Who Raise Dreams.</p>
+    </footer>
+
+    <!-- Portal JavaScript Controller -->
+    <script src="/portal/gcm-portal.js"></script>
+</body>
+</html>
+

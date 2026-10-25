@@ -113,6 +113,28 @@
       },
     },
 
+
+    // ADD THIS RIGHT HERE:
+    leads: {
+      async submit({ businessName, location, email, phone, website }) {
+        const { error } = await db.from('business_leads').insert({
+          business_name: clean(businessName),
+          location: clean(location),
+          owner_email: normEmail(email),
+          phone_number: clean(phone),
+          business_website: clean(website) || null,
+        });
+        if (error) {
+          if (error.code === '23505') return { ok: false, reason: 'duplicate' };
+          if (error.code === '23514') return { ok: false, reason: 'invalid' };
+          throw error;
+        }
+        return { ok: true };
+      },
+    },
+
+
+
     auth: {
       async signIn(email, password) {
         return unwrap(await db.auth.signInWithPassword({ email: normEmail(email), password }));
@@ -192,6 +214,15 @@
       },
       async deleteUser(id) {
         unwrap(await db.from('users').delete().eq('id', id));
+      },
+      async listLeads() {
+        return unwrap(await db.from('business_leads').select('*').order('created_at', { ascending: false }).limit(500));
+      },
+      async updateLead(id, fields) {
+        return unwrap(await db.from('business_leads').update(fields).eq('id', id).select().single());
+      },
+      async deleteLead(id) {
+        unwrap(await db.from('business_leads').delete().eq('id', id));
       },
     },
 
