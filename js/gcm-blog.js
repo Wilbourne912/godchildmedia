@@ -5,6 +5,7 @@
 
     const LOGO = 'https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_logo.webp';
     const REACTIONS = { like: '\uD83D\uDC4D', bookmark: '\uD83D\uDD16', flame: '\uD83D\uDD25' };
+    const CHANNEL = document.body.dataset.channel === 'firstborn' ? 'firstborn' : 'standard';
 
     const style = document.createElement('style');
     style.textContent = [
@@ -92,6 +93,7 @@
         } else if (host === 'youtube.com' || host === 'youtube-nocookie.com') {
           if (u.pathname === '/watch') id = u.searchParams.get('v');
           else if (u.pathname.startsWith('/embed/')) id = u.pathname.split('/')[2];
+          else if (u.pathname.startsWith('/shorts/')) id = u.pathname.split('/')[2];
         }
         return id && /^[A-Za-z0-9_-]{11}$/.test(id) ? id : null;
       } catch (err) {
@@ -164,7 +166,7 @@
     async function renderArchive() {
       showMessage(grid, 'Loading transmissions...');
       try {
-        const posts = await GCM.posts.list(50);
+        const posts = await GCM.posts.list(50, CHANNEL);
         grid.textContent = '';
         if (!posts.length) {
           showMessage(grid, 'No transmissions yet. Check back soon.');

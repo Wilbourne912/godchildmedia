@@ -3,7 +3,7 @@
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vYnd0b2d6a3ZqZ2FnaHdwenhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMDk4NTUsImV4cCI6MjEwNzc4NTg1NX0.pbmQ1K1_XnbLdvyZinH0PYQ-dXhtp5XCuDIwMNxApeQ';
 
   const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  const POST_COLUMNS = 'id, title, slug, summary, tag, video_url, read_time, thumbnail_path, created_at';
+  const POST_COLUMNS = 'id, title, slug, summary, tag, video_url, read_time, thumbnail_path, channel, created_at';
   const THUMB_TYPES = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
   const THUMB_MAX_BYTES = 2 * 1024 * 1024;
 
@@ -26,6 +26,7 @@
       } else if (host === 'youtube.com' || host === 'youtube-nocookie.com') {
         if (u.pathname === '/watch') id = u.searchParams.get('v');
         else if (u.pathname.startsWith('/embed/')) id = u.pathname.split('/')[2];
+        else if (u.pathname.startsWith('/shorts/')) id = u.pathname.split('/')[2];
       }
       return id && /^[A-Za-z0-9_-]{11}$/.test(id) ? id : null;
     } catch (err) {
@@ -67,11 +68,13 @@
     },
 
     posts: {
-      async list(limit = 50) {
-        return unwrap(await db.from('posts').select(POST_COLUMNS).order('created_at', { ascending: false }).limit(limit));
+      async list(limit = 50, channel = 'standard') {
+        let query = db.from('posts').select(POST_COLUMNS).order('created_at', { ascending: false }).limit(limit);
+        if (channel !== 'all') query = query.eq('channel', channel);
+        return unwrap(await query);
       },
-      async latest() {
-        return unwrap(await db.from('posts').select(POST_COLUMNS).order('created_at', { ascending: false }).limit(1).maybeSingle());
+      async latest(channel = 'standard') {
+        return unwrap(await db.from('posts').select(POST_COLUMNS).eq('channel', channel).order('created_at', { ascending: false }).limit(1).maybeSingle());
       },
       async bySlug(slug) {
         return unwrap(await db.from('posts').select('*').eq('slug', slug).maybeSingle());
@@ -162,7 +165,7 @@
     },
 
     admin: {
-      async createPost({ title, summary, content, tag, videoUrl, readTime, slug, thumbnailPath }) {
+      async createPost({ title, summary, content, tag, videoUrl, readTime, slug, thumbnailPath, channel }) {
         return unwrap(await db.from('posts').insert({
           title: clean(title),
           slug: clean(slug) || GCM.slugify(title),
@@ -172,6 +175,7 @@
           tag: clean(tag),
           video_url: clean(videoUrl) || null,
           read_time: clean(readTime) || null,
+          channel: channel === 'firstborn' ? 'firstborn' : 'standard',
         }).select().single());
       },
       async uploadThumbnail(file) {
@@ -237,3 +241,4 @@
 
   window.GCM = GCM;
 })();
+

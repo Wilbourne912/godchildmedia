@@ -43,7 +43,7 @@
   async function loadPosts() {
     const tbody = $('posts-table-body');
     try {
-      const posts = await GCM.posts.list(100);
+      const posts = await GCM.posts.list(100, 'all');
       postsById = {};
       tbody.textContent = '';
       if (!posts.length) {
@@ -60,7 +60,7 @@
         const actionCell = document.createElement('td');
         actionCell.appendChild(actions);
         row.appendChild(td(post.title, 'title-col'));
-        row.appendChild(td(post.tag || 'Uncategorized'));
+        row.appendChild(td((post.channel === 'firstborn' ? 'FirstBorn \u2022 ' : '') + (post.tag || 'Uncategorized')));
         row.appendChild(td(fmtDate(post.created_at)));
         row.appendChild(actionCell);
         tbody.appendChild(row);
@@ -196,6 +196,26 @@
     form.addEventListener('reset', () => setTimeout(updateCounter, 0));
     updateCounter();
 
+    let channelField = $('post-channel');
+    if (!channelField) {
+      const group = document.createElement('div');
+      group.className = 'form-group full';
+      const label = document.createElement('label');
+      label.textContent = 'Publish To';
+      label.htmlFor = 'post-channel';
+      channelField = document.createElement('select');
+      channelField.id = 'post-channel';
+      [['standard', 'Standard blog (God Child Media)'], ['firstborn', 'FirstBorn 912 page']].forEach(([value, text]) => {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = text;
+        channelField.appendChild(option);
+      });
+      group.appendChild(label);
+      group.appendChild(channelField);
+      form.querySelector('.form-grid').insertAdjacentElement('beforebegin', group);
+    }
+
     let thumbInput = $('post-thumb');
     let thumbPreview = null;
     let thumbRemove = null;
@@ -265,6 +285,7 @@
       const readTime = $('post-read').value;
       const summary = $('post-summary').value;
       const content = contentField.value;
+      const channel = channelField.value;
 
       if (videoUrl && !/^https:\/\//i.test(videoUrl)) {
         alert('Video URL must start with https://');
@@ -293,6 +314,7 @@
               content: content.trim() || null,
               video_url: videoUrl || null,
               read_time: readTime.trim() || null,
+              channel: channel,
             };
             if (newPath) fields.thumbnail_path = newPath;
             else if (thumbRemove && thumbRemove.checked) fields.thumbnail_path = null;
@@ -300,7 +322,7 @@
             if ((newPath || fields.thumbnail_path === null) && editingThumb) await GCM.admin.removeThumbnail(editingThumb);
             alert('Transmission updated.');
           } else {
-            await GCM.admin.createPost({ title, summary, content, tag, videoUrl, readTime, thumbnailPath: newPath });
+            await GCM.admin.createPost({ title, summary, content, tag, videoUrl, readTime, channel, thumbnailPath: newPath });
             alert('Transmission broadcast to the network.');
           }
         } catch (saveErr) {
@@ -331,6 +353,7 @@
         $('post-read').value = post.read_time || '';
         $('post-summary').value = post.summary;
         contentField.value = post.content || '';
+        channelField.value = post.channel || 'standard';
         updateCounter();
         thumbInput.value = '';
         setThumbPreview(post.thumbnail_path);
