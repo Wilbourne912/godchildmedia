@@ -4,7 +4,7 @@
   const FALLBACK_LINKS = [
     { label: 'AI Services & Products', url: '/', placement: 'both' },
     { label: 'GCM Blog', url: '/blog/', placement: 'both' },
-    { label: 'FirstBorn 912', url: '/firstborn912/', placement: 'both' },
+    { label: 'FirstBorn 912', url: '/firstborn912/bio/', placement: 'both' },
   ];
 
   const CSS = [
@@ -36,7 +36,8 @@
     if (url.charAt(0) !== '/') return false;
     const path = window.location.pathname.replace(/index\.html$/, '');
     if (url === '/') return path === '/';
-    return path.indexOf(url) === 0;
+    const section = '/' + url.split('/')[1] + '/';
+    return path.indexOf(section) === 0;
   }
 
   function makeLink(item, skipCurrent) {

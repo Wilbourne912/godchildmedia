@@ -188,6 +188,7 @@
         }
         footer a { color: #f0b429; text-decoration: none; }
     </style>
+<link rel="stylesheet" href="/css/gcm-character.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="/js/gcm-api.js"></script>
 <script src="/js/gcm-blog.js"></script>
@@ -199,17 +200,11 @@
     <div class="cosmic-overlay"></div>
 
     <!-- Navigation Bar (Root relative link back to index.html) -->
-    <header>
-        <a href="/firstborn912/" class="brand-logo-link">
-            <span class="brand-title">FirstBorn 912</span>
-        </a>
-        <a href="/firstborn912/" class="nav-back">Supporter Sign Up</a>
-    </header>
+    <div id="gcm-nav" data-cta-label="Supporter Sign Up" data-cta-url="/firstborn912/"></div>
 
     <main class="blog-container">
         <div class="blog-hero-header">
-            <h1>Transmissions</h1>
-            <p>Dispatches from the run: stories, clips, and the music behind them.</p>
+            <div id="gcm-character" data-name="FirstBorn 912" data-tagline="Dispatches from the run: stories, clips, and the music behind them." data-hero="" data-base="/firstborn912/" data-active="transmissions"></div>
         </div>
 
         <div class="blog-grid">
@@ -220,8 +215,11 @@
     <footer>
         <p><a href="/firstborn912/">Join the supporters list</a></p>
         <p>A God Child Media project</p>
+        <div id="gcm-footer-links"></div>
     </footer>
 
+    <script src="/js/gcm-nav.js" defer></script>
+    <script src="/js/gcm-character.js" defer></script>
 </body>
 </html>
 

@@ -494,22 +494,7 @@
     <!-- Fixed Background Mascot Layer -->
     <div class="fixed-bg-mascot"></div>
 
-    <!-- Dynamic Navigation (Scroll-Spy Connected) -->
-    <header id="header">
-        <div class="nav-container">
-            <a href="#hero" class="logo-link">
-                <img src="https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_logo.webp" alt="God Child Media Logo" class="logo-img">
-            </a>
-            <nav>
-                <ul>
-                    <li><a href="#hero" class="nav-link active">Home</a></li>
-                    <li><a href="#solutions" class="nav-link">Solutions</a></li>
-                    <li><a href="#engine" class="nav-link">Content Engine</a></li>
-                    <li><a href="#saas" class="nav-link">SaaS Builders</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <div id="gcm-nav"></div>
 
     <!-- Hero Section -->
     <section id="hero">
@@ -627,9 +612,11 @@
     <!-- Footer -->
     <footer>
         <p>&copy; 2026 <span>God Child Media</span>. All Rights Reserved. For Those Who Raise Dreams.</p>
+        <div id="gcm-footer-links"></div>
     </footer>
     
     <script src="/js/gcm-home.js"></script>
+    <script src="/js/gcm-nav.js" defer></script>
     <!-- JavaScript: Scroll-Spy & Floating Card Reveal Controller -->
         <script type="text/plain">
         // 1. Floating Card Scroll Reveal (Intersection Observer)
@@ -638,69 +625,4 @@
         const revealObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('active-reveal');
-                    observer.unobserve(entry.target); // Animate once
-                }
-            });
-        }, {
-            threshold: 0.15
-        });
-
-        revealElements.forEach(el => revealObserver.observe(el));
-
-        // 2. Dynamic Scroll-Spy Navigation (Updates Header Menu Active States)
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.nav-link');
-
-        window.addEventListener('scroll', () => {
-            let current = '';
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (pageYOffset >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (current && link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-        });
-
-        // Replace the existing waitlistForm event listener in index_root.html
-document.getElementById('waitlistForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const emailInput = document.getElementById('userEmail');
-    const email = emailInput.value.trim();
-    const submitBtn = this.querySelector('button[type="submit"]');
-
-    try {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Initializing...';
-
-        const result = await GCM.waitlist.join(email);
-
-        if (result.ok) {
-            if (result.duplicate) {
-                alert(`Notice: ${email} is already registered in the GCM operative registry.`);
-            } else {
-                alert(`Initialization successful! Welcome to God Child Media, ${email}.`);
-            }
-            this.reset();
-        } else if (result.reason === 'invalid') {
-            alert('Error: Please provide a valid email address.');
-        }
-    } catch (err) {
-        console.error('Waitlist join error:', err);
-        alert('System error during initialization. Please try again later.');
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Initialize';
-    }
-});
-        </script>
-</body>
-</html>
+                    entry.target.classList.add('active-revea
