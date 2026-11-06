@@ -7,6 +7,12 @@
   const THUMB_TYPES = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
   const THUMB_MAX_BYTES = 2 * 1024 * 1024;
 
+  const CHANNELS = {
+    standard: { name: 'God Child Media', label: 'Latest Transmission', adminLabel: 'Standard blog (God Child Media)', path: '/blog/' },
+    firstborn: { name: 'FirstBorn 912', label: 'Latest Transmission \u2022 FirstBorn 912', adminLabel: 'FirstBorn 912 page', path: '/firstborn912/transmissions/' },
+    valerie: { name: 'Valorie The Sylph', label: 'Latest Transmission \u2022 Valorie The Sylph', adminLabel: 'Valorie The Sylph page', path: '/valerie/transmissions/' },
+  };
+
   const clean = (v) => String(v || '').trim();
   const normEmail = (v) => clean(v).toLowerCase();
   const unwrap = ({ data, error }) => {
@@ -43,6 +49,7 @@
 
   const GCM = {
     db,
+    channels: CHANNELS,
 
     slugify(title) {
       return clean(title)
@@ -175,7 +182,7 @@
           tag: clean(tag),
           video_url: clean(videoUrl) || null,
           read_time: clean(readTime) || null,
-          channel: channel === 'firstborn' ? 'firstborn' : 'standard',
+          channel: CHANNELS[channel] ? channel : 'standard',
         }).select().single());
       },
       async uploadThumbnail(file) {

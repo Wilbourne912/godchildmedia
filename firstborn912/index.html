@@ -3,345 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIRSTBORN 912 | Link in Bio</title>
-    <meta name="description" content="On the run, living out of a suitcase, dropping music before time runs out. Join the FIRSTBORN 912 supporters list.">
+    <title>FirstBorn 912 | Supporters List</title>
+    <meta name="description" content="Join the FirstBorn 912 supporters list and hear first when new music and transmissions land.">
     <meta name="theme-color" content="#050409">
-
-    <meta property="og:title" content="FIRSTBORN 912">
+    <meta property="og:title" content="FirstBorn 912">
     <meta property="og:description" content="On the run, living out of a suitcase, dropping music before time runs out.">
     <meta property="og:type" content="website">
-
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="FIRSTBORN 912">
-    <meta name="twitter:description" content="On the run, living out of a suitcase, dropping music before time runs out.">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --bg-deep: #050409;
-            --bg-surface: rgba(13, 10, 20, 0.85);
-            --amber-primary: #f0b429;
-            --amber-glow: rgba(240, 180, 41, 0.35);
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --border-color: rgba(240, 180, 41, 0.2);
-            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 24px 16px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image:
-                radial-gradient(white 1px, transparent 0),
-                radial-gradient(rgba(240,180,41,0.3) 1px, transparent 0);
-            background-size: 60px 60px, 100px 100px;
-            background-position: 0 0, 30px 50px;
-            opacity: 0.12;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .bio-container {
-            width: 100%;
-            max-width: 420px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            text-align: center;
-        }
-
-        .artist-mark {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 4px;
-        }
-
-        .redaction-avatar {
-            width: 88px;
-            height: 88px;
-            border-radius: 50%;
-            background: rgba(13, 10, 20, 0.9);
-            border: 2px solid var(--amber-primary);
-            box-shadow: 0 0 25px var(--amber-glow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .redaction-bar {
-            width: 54px;
-            height: 16px;
-            background: var(--amber-primary);
-            border-radius: 2px;
-            box-shadow: 0 0 10px var(--amber-primary);
-            position: absolute;
-        }
-
-        .artist-name {
-            font-family: 'Cinzel', serif;
-            font-size: 1.5rem;
-            font-weight: 900;
-            letter-spacing: 3px;
-            color: var(--text-main);
-            text-shadow: 0 0 15px rgba(240, 180, 41, 0.3);
-        }
-
-        .story-hook {
-            font-size: 1rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-            max-width: 380px;
-            padding: 0 8px;
-        }
-
-        .latest-song-wrapper {
-            width: 100%;
-        }
-
-        .btn-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            min-height: 48px;
-            padding: 12px 20px;
-            background: var(--bg-surface);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-main);
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: var(--transition-smooth);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        button.btn-link {
-            font-family: inherit;
-            cursor: pointer;
-        }
-
-        button.btn-link:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-link:hover, .btn-link:focus {
-            border-color: var(--amber-primary);
-            background: rgba(240, 180, 41, 0.08);
-            color: var(--amber-primary);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(240, 180, 41, 0.2);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #f0b429, #d99a11);
-            color: var(--bg-deep);
-            border: none;
-            box-shadow: 0 0 20px var(--amber-glow);
-        }
-
-        .btn-primary:hover, .btn-primary:focus {
-            background: linear-gradient(135deg, #f7c344, #e6a414);
-            color: var(--bg-deep);
-            box-shadow: 0 0 30px rgba(240, 180, 41, 0.5);
-        }
-
-        .glass-card {
-            width: 100%;
-            background: var(--bg-surface);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 24px 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .form-title {
-            font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--amber-primary);
-            letter-spacing: 1px;
-        }
-
-        #supporter-form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            width: 100%;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            text-align: left;
-        }
-
-        .input-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        input[type="email"] {
-            width: 100%;
-            min-height: 48px;
-            padding: 12px 16px;
-            background: rgba(5, 4, 9, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 10px;
-            color: var(--text-main);
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        input[type="email"]:focus {
-            border-color: var(--amber-primary);
-            box-shadow: 0 0 12px var(--amber-glow);
-        }
-
-        .honeypot-field {
-            position: absolute;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-        }
-
-        #supporter-status {
-            font-size: 0.9rem;
-            min-height: 1.2em;
-            color: var(--amber-primary);
-            font-weight: 500;
-            word-break: break-word;
-        }
-
-        .social-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            width: 100%;
-        }
-
-        .bio-footer {
-            margin-top: 12px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .bio-footer a {
-            color: var(--amber-primary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.2s;
-        }
-
-        .bio-footer a:hover, .bio-footer a:focus {
-            opacity: 0.8;
-            text-decoration: underline;
-        }
-
-        a:focus-visible, button:focus-visible, input:focus-visible {
-            outline: 2px solid var(--amber-primary);
-            outline-offset: 2px;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                transition: none !important;
-                animation: none !important;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/gcm-character.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="/js/gcm-api.js"></script>
 </head>
-<body>
+<body class="gcm-themed">
 
-    <main class="bio-container">
-        <div class="artist-mark">
-            <div class="redaction-avatar" aria-hidden="true">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f0b429" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                <div class="redaction-bar"></div>
-            </div>
-            <h1 class="artist-name">FIRSTBORN 912</h1>
-        </div>
+    <main class="gcm-char-page">
+        <div id="gcm-character" data-slug="firstborn" data-name="FirstBorn 912" data-subtitle="" data-tagline="On the run, living out of a suitcase, dropping music before time runs out." data-hero="" data-base="/firstborn912/" data-active="signup"></div>
 
-        <p class="story-hook">On the run, living out of a suitcase, dropping music before time runs out.</p>
-
-        <div class="latest-song-wrapper" hidden>
-            <a href="#" class="btn-link" data-track="latest-song" target="_blank" rel="noopener noreferrer">Listen to Latest Song</a>
-        </div>
-
-        <div class="glass-card">
-            <h2 class="form-title">Join the supporters list</h2>
-            <form id="supporter-form">
-                <div class="input-group">
-                    <label for="supporter-email" class="input-label">Email Address</label>
+        <section class="gcm-panel">
+            <h2>Join the supporters list</h2>
+            <p class="gcm-muted">Hear first when new music and transmissions land. Email only.</p>
+            <form id="supporter-form" class="gcm-form" data-list="firstborn" data-success="You're in. Thanks for riding with FirstBorn 912.">
+                <label for="supporter-email">Email address
                     <input id="supporter-email" type="email" name="email" required autocomplete="email" inputmode="email" placeholder="you@example.com">
-                </div>
-                <div class="honeypot-field" aria-hidden="true">
+                </label>
+                <div class="gcm-honeypot" aria-hidden="true">
                     <label for="supporter-website">Website</label>
                     <input id="supporter-website" type="text" name="website" tabindex="-1" autocomplete="off">
                 </div>
-                <button id="supporter-submit" type="submit" class="btn-link btn-primary">Join</button>
+                <button id="supporter-submit" type="submit" class="gcm-btn gcm-btn-primary">Join</button>
             </form>
-            <p id="supporter-status" aria-live="polite"></p>
-        </div>
+            <p id="supporter-status" class="gcm-status" aria-live="polite"></p>
+        </section>
 
-        <div class="social-grid">
-            <a href="https://www.tiktok.com/@firstborn9124" class="btn-link" data-track="tiktok" target="_blank" rel="noopener noreferrer">TikTok</a>
-            <a href="https://www.instagram.com/firstborn_912?xtok=MWE4eTljYThkdG9sZw==" class="btn-link" data-track="instagram" target="_blank" rel="noopener noreferrer">Instagram</a>
-        </div>
-
-        <footer class="bio-footer">
-            <p>A <a href="https://godchildmedia.com" data-track="gcm-home" target="_blank" rel="noopener noreferrer">God Child Media</a> project</p>
-        </footer>
+        <div id="gcm-socials" class="gcm-actions" hidden></div>
     </main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="/js/gcm-api.js"></script>
-<script src="/js/firstborn.js" defer></script>
 
+    <footer class="gcm-footer">
+        <p>A <a href="/" data-track="gcm-home" style="color: #f0b429; text-decoration: none;">God Child Media</a> project</p>
+    </footer>
+
+    <script src="/js/gcm-character.js" defer></script>
+    <script src="/js/gcm-signup.js" defer></script>
 </body>
 </html>
+

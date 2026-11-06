@@ -246,16 +246,15 @@
         <!-- Sidebar Navigation -->
 <aside>
     <button class="sidebar-btn active" onclick="switchTab('transmissions', this)">📡 Manage Transmissions</button>
+    <button class="sidebar-btn" onclick="switchTab('tab-cards', this)">🧩 Page Cards</button>
+    <button class="sidebar-btn" onclick="switchTab('tab-links', this)">🔗 Nav &amp; Footer Links</button>
+    <button class="sidebar-btn" onclick="switchTab('tab-characters', this)">🎭 Characters &amp; Hero Images</button>
+    <button class="sidebar-btn" onclick="switchTab('tab-supporters', this)">📧 Supporters</button>
+    <button class="sidebar-btn" onclick="switchTab('tab-traffic', this)">📈 Traffic &amp; Signups</button>
     <button class="sidebar-btn" onclick="switchTab('comments', this)">💬 User Feedback &amp; Reactions</button>
     <button class="sidebar-btn" onclick="switchTab('users', this)">👥 User Accounts &amp; Waitlist</button>
     <button class="sidebar-btn" onclick="switchTab('leads', this)">🏢 B2B Leads &amp; Demo Passwords</button>
 </aside>
-
-
-
-
-
-        </aside>
 
         <!-- Workspace Area -->
         <main>
@@ -399,8 +398,34 @@
         </table>
     </div>
 </section>
+        
+            <section id="tab-cards" class="tab-content">
+                <h2 class="section-title">Page Cards</h2>
+                <div id="cards-root"></div>
+            </section>
+
+            <section id="tab-links" class="tab-content">
+                <h2 class="section-title">Navigation &amp; Footer Links</h2>
+                <div id="links-root"></div>
+            </section>
+
+            <section id="tab-characters" class="tab-content">
+                <h2 class="section-title">Characters &amp; Hero Images</h2>
+                <div id="characters-root"></div>
+            </section>
+
+            <section id="tab-supporters" class="tab-content">
+                <h2 class="section-title">Supporters</h2>
+                <div id="supporters-root"></div>
+            </section>
+
+            <section id="tab-traffic" class="tab-content">
+                <h2 class="section-title">Traffic &amp; Signups</h2>
+                <div id="traffic-root"></div>
+            </section>
         </main>
     </div>
+    <script src="/js/gcm-admin-site.js"></script>
 </body>
 </html>
 

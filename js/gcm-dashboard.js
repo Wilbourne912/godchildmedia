@@ -60,7 +60,7 @@
         const actionCell = document.createElement('td');
         actionCell.appendChild(actions);
         row.appendChild(td(post.title, 'title-col'));
-        row.appendChild(td((post.channel === 'firstborn' ? 'FirstBorn \u2022 ' : '') + (post.tag || 'Uncategorized')));
+        row.appendChild(td((post.channel && post.channel !== 'standard' && GCM.channels[post.channel] ? GCM.channels[post.channel].name + ' \u2022 ' : '') + (post.tag || 'Uncategorized')));
         row.appendChild(td(fmtDate(post.created_at)));
         row.appendChild(actionCell);
         tbody.appendChild(row);
@@ -205,7 +205,8 @@
       label.htmlFor = 'post-channel';
       channelField = document.createElement('select');
       channelField.id = 'post-channel';
-      [['standard', 'Standard blog (God Child Media)'], ['firstborn', 'FirstBorn 912 page']].forEach(([value, text]) => {
+      Object.keys(GCM.channels).forEach((value) => {
+        const text = GCM.channels[value].adminLabel;
         const option = document.createElement('option');
         option.value = value;
         option.textContent = text;
@@ -390,3 +391,4 @@
 
   window.addEventListener('gcm:admin-ready', init, { once: true });
 })();
+

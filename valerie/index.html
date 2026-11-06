@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valorie The Sylph | Supporters List</title>
+    <meta name="description" content="Join the Valorie The Sylph supporters list and hear first when new music and transmissions land.">
+    <meta name="theme-color" content="#050409">
+    <meta property="og:title" content="Valorie The Sylph">
+    <meta property="og:description" content="AI influencer">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/gcm-character.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+    <script src="/js/gcm-api.js"></script>
+</head>
+<body class="gcm-themed">
+
+    <main class="gcm-char-page">
+        <div id="gcm-character" data-slug="valerie" data-name="Valorie The Sylph" data-subtitle="Valerie Wilbourne" data-tagline="AI influencer" data-hero="" data-base="/valerie/" data-active="signup"></div>
+
+        <section class="gcm-panel">
+            <h2>Join the supporters list</h2>
+            <p class="gcm-muted">Hear first when new music and transmissions land. Email only.</p>
+            <form id="supporter-form" class="gcm-form" data-list="valerie" data-success="You're in. Thanks for joining Valorie The Sylph's supporters.">
+                <label for="supporter-email">Email address
+                    <input id="supporter-email" type="email" name="email" required autocomplete="email" inputmode="email" placeholder="you@example.com">
+                </label>
+                <div class="gcm-honeypot" aria-hidden="true">
+                    <label for="supporter-website">Website</label>
+                    <input id="supporter-website" type="text" name="website" tabindex="-1" autocomplete="off">
+                </div>
+                <button id="supporter-submit" type="submit" class="gcm-btn gcm-btn-primary">Join</button>
+            </form>
+            <p id="supporter-status" class="gcm-status" aria-live="polite"></p>
+        </section>
+
+        <div id="gcm-socials" class="gcm-actions" hidden></div>
+    </main>
+
+    <footer class="gcm-footer">
+        <p>A <a href="/" data-track="gcm-home" style="color: #f0b429; text-decoration: none;">God Child Media</a> project</p>
+    </footer>
+
+    <script src="/js/gcm-character.js" defer></script>
+    <script src="/js/gcm-signup.js" defer></script>
+</body>
+</html>
+

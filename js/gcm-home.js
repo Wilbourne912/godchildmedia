@@ -93,7 +93,8 @@
       preview.appendChild(tap);
     }
 
-    const urlFor = (post) => (post.channel === 'firstborn' ? '/firstborn912/transmissions/?slug=' : '/blog/?slug=') + encodeURIComponent(post.slug);
+    const channelOf = (post) => GCM.channels[post.channel] || GCM.channels.standard;
+    const urlFor = (post) => channelOf(post).path + '?slug=' + encodeURIComponent(post.slug);
 
     function render(post) {
       setText('.transmission-tag', post.tag);
@@ -106,7 +107,7 @@
         thumbImg.style.objectFit = thumbSrc ? 'cover' : '';
       }
       if (overlay) overlay.style.display = post.video_url ? '' : 'none';
-      if (badge) badge.textContent = post.channel === 'firstborn' ? 'Latest Transmission \u2022 FirstBorn 912' : 'Latest Transmission';
+      if (badge) badge.textContent = channelOf(post).label;
 
       if (meta) {
         meta.textContent = '';

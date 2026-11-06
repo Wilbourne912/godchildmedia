@@ -5,7 +5,7 @@
 
     const LOGO = 'https://oobwtogzkvjgaghwpzxs.supabase.co/storage/v1/object/public/media-files/gcm_logo.webp';
     const REACTIONS = { like: '\uD83D\uDC4D', bookmark: '\uD83D\uDD16', flame: '\uD83D\uDD25' };
-    const CHANNEL = document.body.dataset.channel === 'firstborn' ? 'firstborn' : 'standard';
+    const CHANNEL = GCM.channels[document.body.dataset.channel] ? document.body.dataset.channel : 'standard';
 
     const style = document.createElement('style');
     style.textContent = [
@@ -364,3 +364,4 @@
     run();
   }
 })();
+

@@ -550,7 +550,7 @@
             <h2>AI-Powered Solutions</h2>
             <p>Engineered to scale your digital presence with surgical precision.</p>
         </div>
-        <div class="grid-3">
+        <div class="grid-3" data-cards-page="home" data-cards-section="solutions" data-cards-style="landing">
             <div class="card reveal">
                 <div class="card-icon">⚡</div>
                 <h3>Website Optimization</h3>
@@ -575,7 +575,7 @@
             <h2>Autonomous Content Infrastructure</h2>
             <p>Streamline production workflows from data scraping to publication.</p>
         </div>
-        <div class="grid-3">
+        <div class="grid-3" data-cards-page="home" data-cards-section="engine" data-cards-style="landing">
             <div class="card reveal">
                 <div class="card-icon">📊</div>
                 <h3>Data Enrichment</h3>
@@ -617,12 +617,10 @@
     
     <script src="/js/gcm-home.js"></script>
     <script src="/js/gcm-nav.js" defer></script>
+    <script src="/js/gcm-cards.js" defer></script>
     <!-- JavaScript: Scroll-Spy & Floating Card Reveal Controller -->
         <script type="text/plain">
         // 1. Floating Card Scroll Reveal (Intersection Observer)
         const revealElements = document.querySelectorAll('.reveal');
 
-        const revealObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active-revea
+        const 
