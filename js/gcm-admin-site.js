@@ -20,6 +20,29 @@
     return h;
   }
 
+  function showError(target, message) {
+    let box = target.querySelector('.site-error');
+    if (!box) {
+      box = el('p', 'site-error');
+      box.style.cssText = 'margin: 0 0 1rem; padding: 12px 14px; border: 1px solid #ef4444; border-radius: 8px; background: rgba(239, 68, 68, 0.12); color: #fecaca; font-size: 0.9rem; line-height: 1.5;';
+      target.insertBefore(box, target.firstChild);
+    }
+    box.textContent = message;
+  }
+
+  function clearError(target) {
+    const box = target.querySelector('.site-error');
+    if (box) box.remove();
+  }
+
+  function loadHint(error) {
+    const text = friendly(error);
+    if (error && (error.code === '42P01' || error.code === '42703' || /does not exist|schema cache|Could not find/i.test(error.message || ''))) {
+      return text + ' This usually means sql/site-admin.sql has not been run in Supabase yet.';
+    }
+    return text;
+  }
+
   function friendly(error) {
     if (!error) return 'Something went wrong.';
     if (error.code === '23505') return 'That entry already exists.';
@@ -267,9 +290,10 @@
       });
       const { data, error } = await query;
       if (error) {
-        window.alert(friendly(error));
+        showError(listCard, 'Could not load ' + cfg.listTitle + ': ' + loadHint(error));
         return;
       }
+      clearError(listCard);
       ui.rows = data || [];
       renderRows();
     }
@@ -470,4 +494,171 @@
         const tr = el('tr');
         tr.append(td(row.email, 'title-col'), td(row.list), td(row.source), td(new Date(row.created_at).toLocaleDateString()));
         const actions = el('div', 'action-links');
-        actions.appendChild(actionButton('Delete
+        actions.appendChild(actionButton('Delete', 'delete-action', async () => {
+          if (!window.confirm('Remove ' + row.email + ' from the list?')) return;
+          const { data, error } = await GCM.db.from('supporters').delete().eq('id', row.id).select();
+          if (error || !data || !data.length) {
+            window.alert(error ? friendly(error) : 'Nothing was deleted.');
+            return;
+          }
+          await load();
+        }));
+        const cell = el('td');
+        cell.appendChild(actions);
+        tr.appendChild(cell);
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function load() {
+      const { data, error } = await GCM.db.from('supporters').select('id, email, list, source, created_at').order('created_at', { ascending: false }).range(0, 999);
+      if (error) {
+        showError(card, 'Could not load supporters: ' + loadHint(error));
+        return;
+      }
+      clearError(card);
+      rows = data || [];
+      render();
+    }
+
+    exportButton.addEventListener('click', () => {
+      const lines = ['email,list,source,joined'].concat(visible().map((row) => [row.email, row.list, row.source, row.created_at].map(csvCell).join(',')));
+      const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+      const link = el('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'supporters-' + (select.value || 'all') + '.csv';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(link.href);
+    });
+
+    select.addEventListener('change', render);
+    return load();
+  }
+
+  async function mountTraffic(root) {
+    root.textContent = '';
+    const card = el('div', 'glass-card');
+    card.appendChild(heading('Traffic & Signups', '#f3f4f6'));
+
+    const bar = el('div');
+    bar.style.cssText = 'display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 1rem;';
+    const rangeGroup = el('div', 'form-group');
+    rangeGroup.style.marginBottom = '0';
+    rangeGroup.appendChild(el('label', null, 'Period'));
+    const range = el('select');
+    [['7', 'Last 7 days'], ['30', 'Last 30 days'], ['90', 'Last 90 days']].forEach(([value, text]) => {
+      const option = el('option', null, text);
+      option.value = value;
+      range.appendChild(option);
+    });
+    range.value = '30';
+    rangeGroup.appendChild(range);
+    const pageGroup = el('div', 'form-group');
+    pageGroup.style.marginBottom = '0';
+    pageGroup.appendChild(el('label', null, 'Character page'));
+    const pageSelect = el('select');
+    const allPages = el('option', null, 'All pages');
+    allPages.value = '';
+    pageSelect.appendChild(allPages);
+    state.pages.filter((page) => page !== 'home').forEach((page) => {
+      const option = el('option', null, page);
+      option.value = page;
+      pageSelect.appendChild(option);
+    });
+    pageGroup.appendChild(pageSelect);
+    bar.append(rangeGroup, pageGroup);
+
+    const sourcesTable = el('table');
+    const sourcesHead = el('thead');
+    const sourcesHeadRow = el('tr');
+    ['Source', 'Visits', 'Signups', 'Signup rate'].forEach((name) => sourcesHeadRow.appendChild(el('th', null, name)));
+    sourcesHead.appendChild(sourcesHeadRow);
+    const sourcesBody = el('tbody');
+    sourcesTable.append(sourcesHead, sourcesBody);
+
+    const clicksTable = el('table');
+    clicksTable.style.marginTop = '1.5rem';
+    const clicksHead = el('thead');
+    const clicksHeadRow = el('tr');
+    ['Link clicked', 'Clicks'].forEach((name) => clicksHeadRow.appendChild(el('th', null, name)));
+    clicksHead.appendChild(clicksHeadRow);
+    const clicksBody = el('tbody');
+    clicksTable.append(clicksHead, clicksBody);
+
+    const note = el('p', null, 'Source comes from the ?s= tag on your links (for example ?s=tiktok). Clicks on links that open the same tab can be undercounted.');
+    note.style.cssText = 'color: #9ca3af; font-size: 0.8rem; margin-top: 1rem;';
+    card.append(bar, sourcesTable, clicksTable, note);
+    root.appendChild(card);
+
+    async function load() {
+      const { data, error } = await GCM.db.rpc('admin_traffic', { p_days: parseInt(range.value, 10), p_page: pageSelect.value || null });
+      if (error) {
+        showError(card, 'Could not load traffic: ' + loadHint(error));
+        return;
+      }
+      clearError(card);
+      const sources = {};
+      const clicks = [];
+      (data || []).forEach((row) => {
+        const total = Number(row.total);
+        if (row.kind === 'clicks') {
+          clicks.push([row.name, total]);
+          return;
+        }
+        sources[row.name] = sources[row.name] || { views: 0, signups: 0 };
+        sources[row.name][row.kind] = total;
+      });
+      sourcesBody.textContent = '';
+      Object.keys(sources).sort((a, b) => sources[b].views - sources[a].views).forEach((name) => {
+        const entry = sources[name];
+        const rate = entry.views ? Math.round((entry.signups / entry.views) * 1000) / 10 + '%' : '\u2014';
+        const tr = el('tr');
+        tr.append(td(name, 'title-col'), td(String(entry.views)), td(String(entry.signups)), td(rate));
+        sourcesBody.appendChild(tr);
+      });
+      clicksBody.textContent = '';
+      clicks.sort((a, b) => b[1] - a[1]).forEach(([name, total]) => {
+        const tr = el('tr');
+        tr.append(td(name, 'title-col'), td(String(total)));
+        clicksBody.appendChild(tr);
+      });
+    }
+
+    range.addEventListener('change', load);
+    pageSelect.addEventListener('change', load);
+    return load();
+  }
+
+  async function init() {
+    if (state.started) return;
+    state.started = true;
+    try {
+      const { data } = await GCM.db.from('characters').select('slug').order('slug', { ascending: true });
+      (data || []).forEach((row) => {
+        if (state.pages.indexOf(row.slug) === -1) state.pages.push(row.slug);
+      });
+    } catch (e) {}
+    const jobs = [
+      ['cards-root', (root) => mountCrud(root, RESOURCES.cards)],
+      ['links-root', (root) => mountCrud(root, RESOURCES.links)],
+      ['characters-root', (root) => mountCrud(root, RESOURCES.characters)],
+      ['supporters-root', mountSupporters],
+      ['traffic-root', mountTraffic],
+    ];
+    jobs.forEach(([id, mount]) => {
+      const root = $(id);
+      if (!root) return;
+      try {
+        Promise.resolve(mount(root)).catch((error) => showError(root, 'This tab failed to load: ' + (error && error.message ? error.message : error)));
+      } catch (error) {
+        root.textContent = '';
+        showError(root, 'This tab failed to load: ' + (error && error.message ? error.message : error));
+      }
+    });
+  }
+
+  if (document.documentElement.classList.contains('gcm-ready')) init();
+  else window.addEventListener('gcm:admin-ready', init, { once: true });
+})();
