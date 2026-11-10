@@ -6,6 +6,7 @@
     { label: 'GCM Blog', url: '/blog/', placement: 'both' },
     { label: 'FirstBorn 912', url: '/firstborn912/bio/', placement: 'both' },
     { label: 'Valerie Wilbourne', url: '/valerie/bio/', placement: 'both' },
+    { label: 'Vincent Wilbourne', url: '/vincent/bio/', placement: 'both' },
   ];
 
   const CSS = [

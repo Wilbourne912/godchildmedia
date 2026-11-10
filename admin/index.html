@@ -254,6 +254,7 @@
     <button class="sidebar-btn" onclick="switchTab('comments', this)">💬 User Feedback &amp; Reactions</button>
     <button class="sidebar-btn" onclick="switchTab('users', this)">👥 User Accounts &amp; Waitlist</button>
     <button class="sidebar-btn" onclick="switchTab('leads', this)">🏢 B2B Leads &amp; Demo Passwords</button>
+    <button class="sidebar-btn" onclick="switchTab('tab-listings', this); openListings();">🏪 Business Index Editor</button>
 </aside>
 
         <!-- Workspace Area -->
@@ -423,10 +424,29 @@
                 <h2 class="section-title">Traffic &amp; Signups</h2>
                 <div id="traffic-root"></div>
             </section>
+
+            <section id="tab-listings" class="tab-content">
+                <h2 class="section-title">Business Index Editor</h2>
+                <div id="listings-editor"></div>
+            </section>
         </main>
     </div>
     <script src="/js/gcm-admin-site.js"></script>
+    <script src="/js/admin-listings.js"></script>
+    <script>
+        function openListings() {
+            if (window.listingsStarted) return;
+            const client = window.GCM && GCM.db;
+            if (!client) {
+                document.getElementById('listings-editor').textContent = 'Supabase client not found on GCM. Send the createClient line from /js/gcm-api.js.';
+                return;
+            }
+            window.listingsStarted = true;
+            initListingsEditor(client);
+        }
+    </script>
 </body>
 </html>
+
 
 

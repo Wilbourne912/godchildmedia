@@ -11,6 +11,7 @@
     standard: { name: 'God Child Media', label: 'Latest Transmission', adminLabel: 'Standard blog (God Child Media)', path: '/blog/' },
     firstborn: { name: 'FirstBorn 912', label: 'Latest Transmission \u2022 FirstBorn 912', adminLabel: 'FirstBorn 912 page', path: '/firstborn912/transmissions/' },
     valerie: { name: 'Valorie The Sylph', label: 'Latest Transmission \u2022 Valorie The Sylph', adminLabel: 'Valorie The Sylph page', path: '/valerie/transmissions/' },
+    vincent: { name: 'Vincent Wilbourne', label: 'Latest Transmission \u2022 Vincent Wilbourne', adminLabel: 'Vincent Wilbourne page', path: '/vincent/transmissions/' },
   };
 
   const clean = (v) => String(v || '').trim();
