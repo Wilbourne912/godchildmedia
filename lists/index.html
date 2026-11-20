@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gwinnett Motivated-Seller Lists | God Child Media</title>
+<meta name="description" content="How God Child Media builds verified motivated-seller lists from Gwinnett County tax records, with a free sample for real estate investors.">
+<style>
+:root{--bg:#050409;--amber:#f0b429;--ink:#ece8f5;--mute:#a59fb8;--card:rgba(255,255,255,.05);--line:rgba(240,180,41,.25)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#1a1030,var(--bg));color:var(--ink);font:17px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:720px;margin:0 auto;padding:28px 18px 60px}
+a{color:var(--amber)}
+.top{font-size:14px;color:var(--mute)}
+h1{font-size:2rem;line-height:1.2;margin:.4em 0}
+h2{color:var(--amber);font-size:1.25rem;margin:1.8em 0 .4em}
+.lede{color:var(--mute);font-size:1.1rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(10px);margin:22px 0}
+.card h2{margin-top:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}
+.stats b{display:block;color:var(--amber);font-size:1.5rem}
+.stats span{font-size:.8rem;color:var(--mute)}
+input,button,.btn{font:inherit;border-radius:10px;padding:12px 14px}
+input{width:100%;background:#0c0916;border:1px solid var(--line);color:var(--ink);letter-spacing:.12em;text-transform:uppercase}
+button,.btn{display:inline-block;background:var(--amber);color:#1a1200;border:0;font-weight:700;text-decoration:none;cursor:pointer;margin-top:10px}
+button:disabled{opacity:.6}
+#msg{min-height:1.4em;margin:8px 0 0;font-size:.95rem}
+.fine{font-size:.8rem;color:var(--mute);border-top:1px solid var(--line);margin-top:40px;padding-top:16px}
+</style>
+</head>
+<body>
+<main>
+<div class="top"><a href="/">God Child Media</a> / Transmissions</div>
+<h1>How We Find Gwinnett Homeowners Who Are Ready to Sell (and Prove It)</h1>
+<p class="lede">Most lead lists are a pile of names. Ours starts with the one public record that shows real financial pressure: unpaid property taxes.</p>
+
+<div class="card stats">
+<div><b>278,302</b><span>rows in the county delinquent file</span></div>
+<div><b>3,515</b><span>real-property leads left after cleanup</span></div>
+<div><b>Nov 10</b><span>2026 snapshot date</span></div>
+</div>
+
+<h2>1. Start with the public record</h2>
+<p>Gwinnett County publishes a weekly delinquent-tax export. The latest one has 278,302 rows. That sounds like a goldmine until you open it: 89% of the rows are current-year bills that hadn't come due yet.</p>
+
+<h2>2. Strip out the noise</h2>
+<p>We keep only real property with back taxes from prior years. Business equipment accounts go. So do government and church parcels, and the big rental funds that own hundreds of homes and will never be a motivated seller. What's left is about 3,500 parcels.</p>
+
+<h2>3. Read the signals</h2>
+<p>Years owed matters most: an owner three or more years behind is under real pressure. Next is whether the owner lives there. If the tax bill goes to a different address, that's an absentee owner, often a landlord or an heir. If it goes to the house, that's an owner-occupant in a different kind of trouble. We label every lead so you know which conversation you're walking into.</p>
+
+<h2>4. Find the person</h2>
+<p>A tax record gives a name and a mailing address. We run each owner through a skip trace to find current phone numbers.</p>
+
+<h2>5. Check our own work</h2>
+<p>This is the step most list sellers skip. We compare the person we found to the tax record. If the name and current address both match, the record is marked confirmed. If the name matches but the address doesn't, it's probable. Anything else is flagged. In our first test batch, about half of the traced owners were confirmed. We tell you that, because you'll be calling these people and you deserve a straight number.</p>
+
+<div class="card" id="sample">
+<h2>Free sample: 12 confirmed Gwinnett leads</h2>
+<p>Buyers get a PIN with their invite. Enter it to download the CSV. Phone numbers are partly masked in the sample.</p>
+<input id="pin" type="text" autocomplete="off" autocapitalize="characters" maxlength="12" placeholder="XXXX-XXXX" aria-label="Sample PIN">
+<button id="go" type="button">Download sample</button>
+<p id="msg" role="status"></p>
+</div>
+
+<div class="card" id="buy" hidden>
+<h2>Want the full list?</h2>
+<p>Every record, full phone numbers, delivered by email after payment.</p>
+<a class="btn" id="pay" href="#">Get the full list</a>
+</div>
+
+<p class="fine">Data comes from public county records and commercial people-search sources, and it can contain errors. Records are a snapshot and go stale as owners pay or sell. Not for credit, insurance, tenant, or employment decisions. Buyers are responsible for complying with Do Not Call and other contact laws before calling or texting anyone.</p>
+</main>
+<script src="/js/lists.js"></script>
+</body>
+</html>
+
