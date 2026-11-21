@@ -1,6 +1,6 @@
 const SB_URL = "https://oobwtogzkvjgaghwpzxs.supabase.co";
 const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vYnd0b2d6a3ZqZ2FnaHdwenhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMDk4NTUsImV4cCI6MjEwNzc4NTg1NX0.pbmQ1K1_XnbLdvyZinH0PYQ-dXhtp5XCuDIwMNxApeQ";
-const PAY_URL = "";
+const PAY_URL = "https://buy.stripe.com/bJe3cn23r4Ed0fT65g83C00";
 const SLUG = "gwinnett-sample";
 
 const pinEl = document.getElementById("pin");
