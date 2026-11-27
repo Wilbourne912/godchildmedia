@@ -151,7 +151,7 @@
       const footer = el('div', 'blog-card-footer');
       footer.appendChild(el('span', '', fmtDate(post.created_at) + (post.read_time ? ' \u2022 ' + post.read_time : '')));
       const link = el('a', 'read-btn', 'Read Full Article');
-      link.href = '?slug=' + encodeURIComponent(post.slug);
+            link.href = CHANNEL === 'standard' ? '/blog/' + encodeURIComponent(post.slug) + '/' : '?slug=' + encodeURIComponent(post.slug);
       footer.appendChild(link);
 
       body.appendChild(el('span', 'blog-tag', post.tag));
